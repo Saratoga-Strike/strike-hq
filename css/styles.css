@@ -9,6 +9,9 @@
   --red-dark: #760009;
   --blue: #168dff;
   --gold: #f2b632;
+  --transition-fast: 0.16s ease;
+  --transition-standard: 0.18s ease;
+  --asset-background: url("../assets/backgrounds/background.webp");
 }
 
 * {
@@ -25,7 +28,7 @@ body {
   min-width: 320px;
   background: var(--background);
   color: var(--text);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 img {
@@ -51,7 +54,7 @@ a:focus-visible {
   padding: 24px;
   background:
     linear-gradient(rgba(0, 0, 0, 0.48), rgba(0, 0, 0, 0.74)),
-    url("../assets/backgrounds/background.webp") center / cover fixed no-repeat;
+    var(--asset-background) center / cover fixed no-repeat;
 }
 
 .background-overlay {
@@ -305,11 +308,6 @@ a:focus-visible {
   font-size: 0.98rem;
 }
 
-.icon-text {
-  color: var(--red);
-  font-size: 1.8rem;
-  text-align: center;
-}
 
 .why-panel {
   padding: clamp(30px, 3.5vw, 54px);
@@ -675,18 +673,6 @@ a:focus-visible {
     padding: 24px 28px;
   }
 
-  .action-icon {
-    width: 28px;
-    height: 28px;
-
-    fill: none;
-    stroke: #f11f2d;
-
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
   .why-panel__header {
     margin-bottom: 12px;
     font-size: clamp(1.65rem, 2.3vw, 2.35rem);
@@ -740,5 +726,95 @@ a:focus-visible {
 
   .why-panel__tagline strong {
     font-size: 1.02rem;
+  }
+}
+
+
+.portal-card__title,
+.portal-card__role,
+.enter-button,
+.wide-action,
+.small-action,
+.why-panel__header,
+.why-panel__tagline {
+  font-family: "Orbitron", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Reusable accent system for portal cards and buttons. */
+.portal-card--hq {
+  --card-accent: var(--red);
+  --card-accent-rgb: 241, 31, 45;
+}
+
+.portal-card--blue {
+  --card-accent: var(--blue);
+  --card-accent-rgb: 22, 141, 255;
+}
+
+.portal-card--gold {
+  --card-accent: var(--gold);
+  --card-accent-rgb: 242, 182, 50;
+}
+
+.enter-button--red {
+  --button-accent: var(--red);
+  --button-glow-rgb: 241, 31, 45;
+}
+
+.enter-button--blue {
+  --button-accent: var(--blue);
+  --button-glow-rgb: 22, 141, 255;
+}
+
+.enter-button--gold {
+  --button-accent: var(--gold);
+  --button-glow-rgb: 242, 182, 50;
+}
+
+.action-icon {
+  width: 28px;
+  height: 28px;
+  justify-self: center;
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.benefit__icon svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: min(1480px, 100%);
+  margin: 10px auto 0;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.site-footer__divider {
+  width: 28px;
+  height: 1px;
+  background: rgba(241, 31, 45, 0.48);
+}
+
+@media (max-width: 500px) {
+  .site-footer {
+    flex-wrap: wrap;
+    gap: 7px;
+    text-align: center;
   }
 }

@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="Strike helps homeowners save money and gives sales professionals the tools, training, and opportunity to succeed.">
+  <meta name="description" content="Strike helps homeowners save money and gives sales professionals the tools, training, and opportunity to succeed.">
   <title>Strike</title>
-  <link rel="icon" type="image/png" href="assets/logo/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-
-<body>
+<body class="strike-portal">
   <div class="page-shell">
     <div class="background-overlay" aria-hidden="true"></div>
 
     <header class="hero">
-      <img class="hero-logo" src="assets/logo/hero-logo.webp" alt="Strike">
+      <img class="hero-logo" data-asset="heroLogo" src="assets/logo/hero-logo.webp" alt="Strike">
     </header>
 
     <main class="landing-layout">
@@ -28,12 +28,21 @@
               <strong>Strike HQ</strong>
             </div>
 
-            <img class="portal-card__icon portal-card__icon--hq" src="assets/icons/s-bolt-red.webp" alt=""
-              aria-hidden="true">
+            <img
+              class="portal-card__icon portal-card__icon--hq"
+              data-asset="strikeHqIcon"
+              loading="lazy"
+              src="assets/icons/s-bolt-red.webp"
+              alt=""
+              aria-hidden="true"
+            >
 
-            <a class="enter-button enter-button--red"
+            <a
+              class="enter-button enter-button--red"
               href="https://virtual.fiberonyx.com/?url=%252Fv2%252Flocation%252F2y7t6RQ7whC5QFkjdzIq%252Fsettings%252Fstaff%252Fteam"
-              target="_blank" rel="noopener noreferrer">
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Enter
             </a>
           </article>
@@ -45,9 +54,16 @@
                 <strong>Setter</strong>
               </h2>
 
-              <img class="portal-card__icon" src="assets/icons/s-bolt-blue.webp" alt="" aria-hidden="true">
+              <img
+                class="portal-card__icon"
+                data-asset="mobileSetterIcon"
+                loading="lazy"
+                src="assets/icons/s-bolt-blue.webp"
+                alt=""
+                aria-hidden="true"
+              >
 
-              <a class="enter-button enter-button--blue" href="pages/mobile-setter.html">
+              <a class="enter-button enter-button--blue" href="/mobile-setter">
                 Enter
               </a>
             </article>
@@ -58,9 +74,16 @@
                 <strong>Closer</strong>
               </h2>
 
-              <img class="portal-card__icon" src="assets/icons/s-bolt-gold.webp" alt="" aria-hidden="true">
+              <img
+                class="portal-card__icon"
+                data-asset="mobileCloserIcon"
+                loading="lazy"
+                src="assets/icons/s-bolt-gold.webp"
+                alt=""
+                aria-hidden="true"
+              >
 
-              <a class="enter-button enter-button--gold" href="pages/mobile-closer.html">
+              <a class="enter-button enter-button--gold" href="/mobile-closer">
                 Enter
               </a>
             </article>
@@ -71,9 +94,16 @@
                 <strong>Setter</strong>
               </h2>
 
-              <img class="portal-card__icon" src="assets/icons/bolt-blue.webp" alt="" aria-hidden="true">
+              <img
+                class="portal-card__icon"
+                data-asset="fiberSetterIcon"
+                loading="lazy"
+                src="assets/icons/bolt-blue.webp"
+                alt=""
+                aria-hidden="true"
+              >
 
-              <a class="enter-button enter-button--blue" href="pages/fiber-setter.html">
+              <a class="enter-button enter-button--blue" href="/fiber-setter">
                 Enter
               </a>
             </article>
@@ -84,9 +114,16 @@
                 <strong>Closer</strong>
               </h2>
 
-              <img class="portal-card__icon" src="assets/icons/bolt-gold.webp" alt="" aria-hidden="true">
+              <img
+                class="portal-card__icon"
+                data-asset="fiberCloserIcon"
+                loading="lazy"
+                src="assets/icons/bolt-gold.webp"
+                alt=""
+                aria-hidden="true"
+              >
 
-              <a class="enter-button enter-button--gold" href="pages/fiber-closer.html">
+              <a class="enter-button enter-button--gold" href="/fiber-closer">
                 Enter
               </a>
             </article>
@@ -94,34 +131,46 @@
         </div>
 
         <nav class="action-grid" aria-label="Additional destinations">
-          <a class="wide-action" href="pages/join-team.html">
+          <a class="wide-action" href="/join-the-team">
             <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
             <span>Join the Team</span>
           </a>
 
-          <a class="wide-action" href="pages/save-money.html">
-            <span class="icon-text" aria-hidden="true">$</span>
+          <a class="wide-action" href="/save-money">
+            <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8"/>
+              <path d="M12 6v12"/>
+            </svg>
             <span>Save Money</span>
           </a>
 
-          <a class="small-action" href="pages/about.html">
-            <span class="icon-text" aria-hidden="true">ⓘ</span>
+          <a class="small-action" href="/about">
+            <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 11v5"/>
+              <path d="M12 8h.01"/>
+            </svg>
             <span>About Us</span>
           </a>
 
-          <a class="small-action" href="pages/contact.html">
-            <span class="icon-text" aria-hidden="true">✉</span>
+          <a class="small-action" href="/contact">
+            <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="1"/>
+              <path d="m3 7 9 6 9-6"/>
+            </svg>
             <span>Contact Us</span>
           </a>
         </nav>
       </section>
 
       <aside class="why-panel">
+        <!-- WHY STRIKE COPY: edit the heading, intro, benefits, and tagline below. -->
         <div class="why-panel__header">
           <span>Why</span>
           <strong>Strike</strong>
@@ -134,7 +183,13 @@
 
         <div class="benefit-list">
           <article class="benefit">
-            <div class="benefit__icon" aria-hidden="true">⌂</div>
+            <div class="benefit__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M3 11.5 12 4l9 7.5"/>
+                <path d="M5 10.5V20h14v-9.5"/>
+                <path d="M9 20v-6h6v6"/>
+              </svg>
+            </div>
             <div>
               <h2>Save Homeowners Money</h2>
               <p>
@@ -145,7 +200,14 @@
           </article>
 
           <article class="benefit">
-            <div class="benefit__icon" aria-hidden="true">◎</div>
+            <div class="benefit__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/>
+                <path d="M17 11a4 4 0 0 0 0-8"/>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              </svg>
+            </div>
             <div>
               <h2>A Career That Powers You</h2>
               <p>
@@ -156,7 +218,15 @@
           </article>
 
           <article class="benefit">
-            <div class="benefit__icon" aria-hidden="true">↗</div>
+            <div class="benefit__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 19V9"/>
+                <path d="M9 19V5"/>
+                <path d="M14 19v-7"/>
+                <path d="M19 19V3"/>
+                <path d="m3 14 6-5 5 3 7-8"/>
+              </svg>
+            </div>
             <div>
               <h2>Unlimited Potential</h2>
               <p>
@@ -173,9 +243,14 @@
         </div>
       </aside>
     </main>
+
+    <footer class="site-footer">
+      <span>© <span id="current-year"></span> Strike</span>
+      <span class="site-footer__divider" aria-hidden="true"></span>
+      <span>Powered by Strike HQ</span>
+    </footer>
   </div>
 
   <script src="js/app.js"></script>
 </body>
-
 </html>
