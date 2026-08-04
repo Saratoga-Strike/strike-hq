@@ -2,52 +2,29 @@ document.documentElement.classList.add("js");
 
 function getStrikeConfig() {
   if (!window.STRIKE_CONFIG) {
-    throw new Error("STRIKE_CONFIG was not loaded. Make sure js/config.js loads before js/app.js.");
+    throw new Error(
+      "STRIKE_CONFIG was not loaded. Make sure config.js loads before app.js."
+    );
   }
 
   return window.STRIKE_CONFIG;
 }
 
-function setImageSource(id, source) {
-  const image = document.getElementById(id);
+function setLinkDestination(elementId, destination) {
+  const link = document.getElementById(elementId);
 
-  if (image && source) {
-    image.src = source;
+  if (!link || !destination) {
+    return;
   }
+
+  link.href = destination;
 }
 
-function setLinkDestination(id, destination) {
-  const link = document.getElementById(id);
-
-  if (link && destination) {
-    link.href = destination;
-  }
-}
-
-function applyStrikeConfiguration() {
+function applyNavigationLinks() {
   const config = getStrikeConfig();
-  const { assets, links, company } = config;
+  const { links } = config;
 
-  setImageSource("heroLogo", assets.heroLogo);
-  setImageSource("strikeHqIcon", assets.strikeHqIcon);
-  setImageSource("mobileSetterIcon", assets.mobileSetterIcon);
-  setImageSource("mobileCloserIcon", assets.mobileCloserIcon);
-  setImageSource("fiberSetterIcon", assets.fiberSetterIcon);
-  setImageSource("fiberCloserIcon", assets.fiberCloserIcon);
-
-  if (assets.background) {
-    document.documentElement.style.setProperty(
-      "--asset-background",
-      `url("${assets.background}")`
-    );
-  }
-
-  const favicon = document.getElementById("siteFavicon");
-  if (favicon && assets.favicon) {
-    favicon.href = assets.favicon;
-  }
-
-  setLinkDestination("strikeHqLink", links.strikeHq);
+  setLinkDestination("strikeHqLink", links.strikeHQ);
   setLinkDestination("mobileSetterLink", links.mobileSetter);
   setLinkDestination("mobileCloserLink", links.mobileCloser);
   setLinkDestination("fiberSetterLink", links.fiberSetter);
@@ -56,15 +33,13 @@ function applyStrikeConfiguration() {
   setLinkDestination("saveMoneyLink", links.saveMoney);
   setLinkDestination("aboutLink", links.about);
   setLinkDestination("contactLink", links.contact);
+}
 
-  const currentYear = document.getElementById("current-year");
-  if (currentYear) {
-    currentYear.textContent = new Date().getFullYear();
-  }
+function updateFooterYear() {
+  const yearElement = document.getElementById("current-year");
 
-  const footerCompany = document.querySelector(".site-footer span:first-child");
-  if (footerCompany && company?.name) {
-    footerCompany.innerHTML = `© <span id="current-year">${new Date().getFullYear()}</span> ${company.name}`;
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
   }
 }
 
@@ -74,28 +49,44 @@ function initializeRevealAnimations() {
   );
 
   if (!("IntersectionObserver" in window)) {
-    items.forEach((item) => item.classList.add("reveal--visible"));
+    items.forEach((item) => {
+      item.classList.add("reveal--visible");
+    });
+
     return;
   }
 
-  items.forEach((item) => item.classList.add("reveal"));
+  items.forEach((item) => {
+    item.classList.add("reveal");
+  });
 
   const observer = new IntersectionObserver(
     (entries, instance) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
+        if (!entry.isIntersecting) {
+          return;
+        }
 
         entry.target.classList.add("reveal--visible");
         instance.unobserve(entry.target);
       });
     },
-    { threshold: 0.12 }
+    {
+      threshold: 0.12
+    }
   );
 
-  items.forEach((item) => observer.observe(item));
+  items.forEach((item) => {
+    observer.observe(item);
+  });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  applyStrikeConfiguration();
-  initializeRevealAnimations();
+  try {
+    applyNavigationLinks();
+    updateFooterYear();
+    initializeRevealAnimations();
+  } catch (error) {
+    console.error("Strike homepage initialization failed:", error);
+  }
 });
