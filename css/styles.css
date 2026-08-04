@@ -11,7 +11,6 @@
   --gold: #f2b632;
   --transition-fast: 0.16s ease;
   --transition-standard: 0.18s ease;
-  --asset-background: url("https://saratoga-strike.github.io/strike-hq/assets/backgrounds/background.webp");
 }
 
 * {
@@ -52,12 +51,24 @@ a:focus-visible {
 .page-shell {
   position: relative;
   isolation: isolate;
+
+  width: 100%;
   min-height: 100vh;
+
   overflow: hidden;
   padding: 24px;
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.48), rgba(0, 0, 0, 0.74)),
-    var(--asset-background) center / cover fixed no-repeat;
+
+  background-color: #030304;
+  background-image:
+    linear-gradient(
+      rgba(0, 0, 0, 0.38),
+      rgba(0, 0, 0, 0.58)
+    ),
+    url("https://saratoga-strike.github.io/strike-hq/assets/backgrounds/background.webp");
+
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .background-overlay {
