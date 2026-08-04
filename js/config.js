@@ -1,44 +1,68 @@
 /*
-  STRIKE HQ CONFIGURATION
-  Edit this file when moving assets into GoHighLevel Media Storage
-  or when changing page destinations.
+==========================================================
+ STRIKE HQ CONFIGURATION
+==========================================================
 
-  Replace the local asset paths below with the full Media Storage URLs.
-  Example:
-  heroLogo: "https://storage.googleapis.com/.../hero-logo.webp"
+This is the ONLY file you should need to edit in the future.
+
+If you ever:
+- Change an icon
+- Replace the logo
+- Change page URLs
+- Change the Strike HQ link
+
+...you only edit this file.
+
+==========================================================
 */
 
 window.STRIKE_CONFIG = {
-  company: {
-    name: "Strike",
-    footerText: "Powered by Strike HQ"
-  },
 
-  assets: {
-    background: "assets/backgrounds/background.webp",
-    heroLogo: "assets/logo/hero-logo.webp",
-    strikeLogo: "assets/logo/strike-logo.webp",
-    favicon: "assets/logo/favicon.png",
+    company: {
+        name: "Strike",
+        footerText: "Powered by Strike HQ"
+    },
 
-    strikeHqIcon: "assets/icons/s-bolt-red.webp",
-    mobileSetterIcon: "assets/icons/s-bolt-blue.webp",
-    mobileCloserIcon: "assets/icons/s-bolt-gold.webp",
-    fiberSetterIcon: "assets/icons/bolt-blue.webp",
-    fiberCloserIcon: "assets/icons/bolt-gold.webp"
-  },
+    assets: {
 
-  links: {
-    strikeHq:
-      "https://virtual.fiberonyx.com/?url=%252Fv2%252Flocation%252F2y7t6RQ7whC5QFkjdzIq%252Fsettings%252Fstaff%252Fteam",
+        // Background
+        background: "assets/backgrounds/background.webp",
 
-    mobileSetter: "/mobile-setter",
-    mobileCloser: "/mobile-closer",
-    fiberSetter: "/fiber-setter",
-    fiberCloser: "/fiber-closer",
+        // Logos
+        heroLogo: "assets/logo/hero-logo.webp",
+        strikeLogo: "assets/logo/strike-logo.webp",
+        favicon: "assets/logo/favicon.png",
 
-    joinTeam: "/join-the-team",
-    saveMoney: "/save-money",
-    about: "/about",
-    contact: "/contact"
-  }
+        // HQ
+        strikeHqIcon: "assets/icons/s-bolt-red.webp",
+
+        // Mobile
+        mobileSetterIcon: "assets/icons/s-bolt-blue.webp",
+        mobileCloserIcon: "assets/icons/s-bolt-gold.webp",
+
+        // Fiber
+        fiberSetterIcon: "assets/icons/bolt-blue.webp",
+        fiberCloserIcon: "assets/icons/bolt-gold.webp"
+    },
+
+    links: {
+
+        // GoHighLevel
+        strikeHq:
+            "https://virtual.fiberonyx.com/?url=%252Fv2%252Flocation%252F2y7t6RQ7whC5QFkjdzIq%252Fsettings%252Fstaff%252Fteam",
+
+        // Internal pages
+        mobileSetter: "pages/mobile-setter.html",
+        mobileCloser: "pages/mobile-closer.html",
+
+        fiberSetter: "pages/fiber-setter.html",
+        fiberCloser: "pages/fiber-closer.html",
+
+        joinTeam: "pages/join-team.html",
+        saveMoney: "pages/save-money.html",
+
+        about: "pages/about.html",
+        contact: "pages/contact.html"
+    }
+
 };
