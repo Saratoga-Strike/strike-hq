@@ -1,46 +1,39 @@
 document.documentElement.classList.add("js");
 
-/*
-  GOHIGHLEVEL CONFIGURATION
-  Paste each Media Storage URL between the quotes.
-  Leave a value blank to keep the local fallback path from the HTML/CSS.
-*/
-const STRIKE_CONFIG = {
-  assets: {
-    background: "",
-    heroLogo: "",
-    strikeHqIcon: "",
-    mobileSetterIcon: "",
-    mobileCloserIcon: "",
-    fiberSetterIcon: "",
-    fiberCloserIcon: ""
-  },
-
-  links: {
-    strikeHq:
-      "https://virtual.fiberonyx.com/?url=%252Fv2%252Flocation%252F2y7t6RQ7whC5QFkjdzIq%252Fsettings%252Fstaff%252Fteam",
-    mobileSetter: "/mobile-setter",
-    mobileCloser: "/mobile-closer",
-    fiberSetter: "/fiber-setter",
-    fiberCloser: "/fiber-closer",
-    joinTeam: "/join-the-team",
-    saveMoney: "/save-money",
-    about: "/about",
-    contact: "/contact"
+function getStrikeConfig() {
+  if (!window.STRIKE_CONFIG) {
+    throw new Error("STRIKE_CONFIG was not loaded. Make sure js/config.js loads before js/app.js.");
   }
-};
+
+  return window.STRIKE_CONFIG;
+}
+
+function setImageSource(id, source) {
+  const image = document.getElementById(id);
+
+  if (image && source) {
+    image.src = source;
+  }
+}
+
+function setLinkDestination(id, destination) {
+  const link = document.getElementById(id);
+
+  if (link && destination) {
+    link.href = destination;
+  }
+}
 
 function applyStrikeConfiguration() {
-  const { assets } = STRIKE_CONFIG;
+  const config = getStrikeConfig();
+  const { assets, links, company } = config;
 
-  document.querySelectorAll("[data-asset]").forEach((image) => {
-    const key = image.dataset.asset;
-    const configuredUrl = assets[key];
-
-    if (configuredUrl) {
-      image.src = configuredUrl;
-    }
-  });
+  setImageSource("heroLogo", assets.heroLogo);
+  setImageSource("strikeHqIcon", assets.strikeHqIcon);
+  setImageSource("mobileSetterIcon", assets.mobileSetterIcon);
+  setImageSource("mobileCloserIcon", assets.mobileCloserIcon);
+  setImageSource("fiberSetterIcon", assets.fiberSetterIcon);
+  setImageSource("fiberCloserIcon", assets.fiberCloserIcon);
 
   if (assets.background) {
     document.documentElement.style.setProperty(
@@ -49,9 +42,29 @@ function applyStrikeConfiguration() {
     );
   }
 
-  const currentYear = document.querySelector("#current-year");
+  const favicon = document.getElementById("siteFavicon");
+  if (favicon && assets.favicon) {
+    favicon.href = assets.favicon;
+  }
+
+  setLinkDestination("strikeHqLink", links.strikeHq);
+  setLinkDestination("mobileSetterLink", links.mobileSetter);
+  setLinkDestination("mobileCloserLink", links.mobileCloser);
+  setLinkDestination("fiberSetterLink", links.fiberSetter);
+  setLinkDestination("fiberCloserLink", links.fiberCloser);
+  setLinkDestination("joinTeamLink", links.joinTeam);
+  setLinkDestination("saveMoneyLink", links.saveMoney);
+  setLinkDestination("aboutLink", links.about);
+  setLinkDestination("contactLink", links.contact);
+
+  const currentYear = document.getElementById("current-year");
   if (currentYear) {
     currentYear.textContent = new Date().getFullYear();
+  }
+
+  const footerCompany = document.querySelector(".site-footer span:first-child");
+  if (footerCompany && company?.name) {
+    footerCompany.innerHTML = `© <span id="current-year">${new Date().getFullYear()}</span> ${company.name}`;
   }
 }
 
@@ -61,6 +74,7 @@ function initializeRevealAnimations() {
   );
 
   if (!("IntersectionObserver" in window)) {
+    items.forEach((item) => item.classList.add("reveal--visible"));
     return;
   }
 
@@ -81,5 +95,7 @@ function initializeRevealAnimations() {
   items.forEach((item) => observer.observe(item));
 }
 
-applyStrikeConfiguration();
-initializeRevealAnimations();
+document.addEventListener("DOMContentLoaded", () => {
+  applyStrikeConfiguration();
+  initializeRevealAnimations();
+});

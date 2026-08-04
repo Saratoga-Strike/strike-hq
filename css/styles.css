@@ -11,7 +11,7 @@
   --gold: #f2b632;
   --transition-fast: 0.16s ease;
   --transition-standard: 0.18s ease;
-  --asset-background: url("../assets/backgrounds/background.webp");
+  --asset-background: none;
 }
 
 * {

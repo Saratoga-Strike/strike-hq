@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Strike helps homeowners save money and gives sales professionals the tools, training, and opportunity to succeed.">
   <title>Strike</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo/favicon.png">
+  <link id="siteFavicon" rel="icon" type="image/png" sizes="32x32" href="">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
     <div class="background-overlay" aria-hidden="true"></div>
 
     <header class="hero">
-      <img class="hero-logo" data-asset="heroLogo" src="assets/logo/hero-logo.webp" alt="Strike">
+      <img id="heroLogo" class="hero-logo" src="" alt="Strike">
     </header>
 
     <main class="landing-layout">
@@ -28,18 +28,9 @@
               <strong>Strike HQ</strong>
             </div>
 
-            <img
-              class="portal-card__icon portal-card__icon--hq"
-              data-asset="strikeHqIcon"
-              loading="lazy"
-              src="assets/icons/s-bolt-red.webp"
-              alt=""
-              aria-hidden="true"
-            >
+            <img id="strikeHqIcon" class="portal-card__icon portal-card__icon--hq" src="" loading="lazy" alt="" aria-hidden="true">
 
-            <a
-              class="enter-button enter-button--red"
-              href="https://virtual.fiberonyx.com/?url=%252Fv2%252Flocation%252F2y7t6RQ7whC5QFkjdzIq%252Fsettings%252Fstaff%252Fteam"
+            <a id="strikeHqLink" class="enter-button enter-button--red" href="#"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -54,16 +45,9 @@
                 <strong>Setter</strong>
               </h2>
 
-              <img
-                class="portal-card__icon"
-                data-asset="mobileSetterIcon"
-                loading="lazy"
-                src="assets/icons/s-bolt-blue.webp"
-                alt=""
-                aria-hidden="true"
-              >
+              <img id="mobileSetterIcon" class="portal-card__icon" src="" loading="lazy" alt="" aria-hidden="true">
 
-              <a class="enter-button enter-button--blue" href="/mobile-setter">
+              <a id="mobileSetterLink" class="enter-button enter-button--blue" href="#">
                 Enter
               </a>
             </article>
@@ -74,16 +58,9 @@
                 <strong>Closer</strong>
               </h2>
 
-              <img
-                class="portal-card__icon"
-                data-asset="mobileCloserIcon"
-                loading="lazy"
-                src="assets/icons/s-bolt-gold.webp"
-                alt=""
-                aria-hidden="true"
-              >
+              <img id="mobileCloserIcon" class="portal-card__icon" src="" loading="lazy" alt="" aria-hidden="true">
 
-              <a class="enter-button enter-button--gold" href="/mobile-closer">
+              <a id="mobileCloserLink" class="enter-button enter-button--gold" href="#">
                 Enter
               </a>
             </article>
@@ -94,16 +71,9 @@
                 <strong>Setter</strong>
               </h2>
 
-              <img
-                class="portal-card__icon"
-                data-asset="fiberSetterIcon"
-                loading="lazy"
-                src="assets/icons/bolt-blue.webp"
-                alt=""
-                aria-hidden="true"
-              >
+              <img id="fiberSetterIcon" class="portal-card__icon" src="" loading="lazy" alt="" aria-hidden="true">
 
-              <a class="enter-button enter-button--blue" href="/fiber-setter">
+              <a id="fiberSetterLink" class="enter-button enter-button--blue" href="#">
                 Enter
               </a>
             </article>
@@ -114,16 +84,9 @@
                 <strong>Closer</strong>
               </h2>
 
-              <img
-                class="portal-card__icon"
-                data-asset="fiberCloserIcon"
-                loading="lazy"
-                src="assets/icons/bolt-gold.webp"
-                alt=""
-                aria-hidden="true"
-              >
+              <img id="fiberCloserIcon" class="portal-card__icon" src="" loading="lazy" alt="" aria-hidden="true">
 
-              <a class="enter-button enter-button--gold" href="/fiber-closer">
+              <a id="fiberCloserLink" class="enter-button enter-button--gold" href="#">
                 Enter
               </a>
             </article>
@@ -131,7 +94,7 @@
         </div>
 
         <nav class="action-grid" aria-label="Additional destinations">
-          <a class="wide-action" href="/join-the-team">
+          <a id="joinTeamLink" class="wide-action" href="#">
             <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
               <circle cx="9" cy="7" r="4"/>
@@ -141,7 +104,7 @@
             <span>Join the Team</span>
           </a>
 
-          <a class="wide-action" href="/save-money">
+          <a id="saveMoneyLink" class="wide-action" href="#">
             <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="12" cy="12" r="9"/>
               <path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8"/>
@@ -150,7 +113,7 @@
             <span>Save Money</span>
           </a>
 
-          <a class="small-action" href="/about">
+          <a id="aboutLink" class="small-action" href="#">
             <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="12" cy="12" r="9"/>
               <path d="M12 11v5"/>
@@ -159,7 +122,7 @@
             <span>About Us</span>
           </a>
 
-          <a class="small-action" href="/contact">
+          <a id="contactLink" class="small-action" href="#">
             <svg class="action-icon" viewBox="0 0 24 24" aria-hidden="true">
               <rect x="3" y="5" width="18" height="14" rx="1"/>
               <path d="m3 7 9 6 9-6"/>
@@ -251,6 +214,7 @@
     </footer>
   </div>
 
+  <script src="js/config.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
