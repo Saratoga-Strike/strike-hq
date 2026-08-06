@@ -51,7 +51,7 @@ window.STRIKE_CONFIG = {
         // Company
         // =========================
 
-        joinTeam: "https://strikesales.org/recruit",
+        joinTeam: "https://strikesales.org/work-with-strike",
         saveMoney: "https://strikesales.org/intake",
         about: "pages/about.html",
         contact: "pages/contact.html"
