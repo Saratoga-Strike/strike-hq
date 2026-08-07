@@ -4815,7 +4815,7 @@ const QUIZ = {
         q: "You just booked the appointment. Before hanging up, what do you hand off to the closer?",
         options: [
           { t: "Just the appointment time — closers will re-run discovery on the call.", c: false, why: "No. If the closer has to re-ask about lines and bill, it feels like a cold sale. The whole point of a SET is the context transfer." },
-          { t: "Lines, current bill, carrier, and any major pain point the prospect mentioned — logged in check check readymode/GHL before you dispo.", c: true, why: "This is what a strong set looks like. The closer opens the call with context, the prospect feels known, and the comparison starts immediately." },
+          { t: "Lines, current bill, carrier, and any major pain point the prospect mentioned — logged in GHL before you dispo.", c: true, why: "This is what a strong set looks like. The closer opens the call with context, the prospect feels known, and the comparison starts immediately." },
           { t: "Your personal cell so the closer can call you during the meeting.", c: false, why: "No. The closer shouldn't need to tag you in live. Write the handoff notes — that's the hand-off." },
           { t: "Your opinion on whether they'll close.", c: false, why: "Not useful. Closers want FACTS (lines, bill, carrier, pain) not gut reads. Facts let them tailor — opinions bias them." }
         ]
@@ -5057,8 +5057,6 @@ function renderHome() {
           🔗 GoHighLevel-CRM
         </a>
         <div style="margin-top:14px;padding-top:14px;border-top:1px solid #f0f0f2;color:#1d1d1f;font-size:15px;line-height:1.9;">
-          <div style="margin-bottom:4px;"><strong>Username:</strong> Your Email</div>
-          <div><strong>Password:</strong> Onyx123!</div>
         </div>
       </div>
     </div>
@@ -5091,7 +5089,7 @@ function renderHome() {
 
     <div class="section-tag">Pipeline</div>
     <h2 style="font-size:26px;color:#1d1d1f;margin:22px 0 10px;">Build the pipeline — ABB</h2>
-    <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:12px;">Call floors operate on a pipeline. The work you do this week doesn't pay you this week — it pays you weeks later, when those deals actually close and activate.</p>
+    <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:12px;">Sale floors operate on a pipeline. The work you do this week doesn't pay you this week — it pays you weeks later, when those deals actually close and activate.</p>
     <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:12px;">Here's why there's a lag: most customers take four to six touches before they sign up. They need to think it over, talk to a spouse, wait for a contract to end, take a follow-up call, see a second offer. That process takes time.</p>
     <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:16px;">The power of being a setter on this floor is that you have an entire team behind you doing that follow-up on your behalf. Every lead you generate today gets worked by closers, managers, and our follow-up process for weeks after you hand it off. Your job is to keep feeding the pipeline. The team takes it from there.</p>
 
@@ -5108,9 +5106,9 @@ function renderHome() {
     <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:18px;">Everything else — the pitch, the product, the objection handling, the dialer — we can teach you. Work ethic you have to bring with you.</p>
 
     <div class="section-tag">Communication</div>
-    <h2 style="font-size:26px;color:#1d1d1f;margin:22px 0 10px;">Stay plugged into Pronto</h2>
-    <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:12px;"><strong>Pronto</strong> is the app we use for everything company-wide: meetings, updates, check-ins, and announcements. Stay logged in and stay engaged.</p>
-    <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:18px;">Company meetings, pipeline updates, trainings, heads-ups from leadership — it all flows through Pronto. Missing Pronto means missing the information you need to do your job.</p>
+    <h2 style="font-size:26px;color:#1d1d1f;margin:22px 0 10px;">Stay plugged into Slack</h2>
+    <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:12px;"><strong>Slack</strong> is the app we use for everything company-wide: meetings, updates, check-ins, and announcements. Stay logged in and stay engaged.</p>
+    <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:18px;">Company meetings, pipeline updates, trainings, heads-ups from leadership — it all flows through Slack. Missing Slack means missing the information you need to do your job.</p>
 
     <div class="section-tag">Team</div>
     <h2 style="font-size:26px;color:#1d1d1f;margin:22px 0 10px;">When one person wins, we all win</h2>
@@ -6073,10 +6071,10 @@ const glossary = [
     section: "Porting & Account Information",
     terms: [
       { t: "Porting", d: "The process of transferring a customer's existing phone number from one carrier to another." },
-      { t: "Porting PIN", d: "A one-time PIN generated by the customer's current provider to authorize transferring their number to Verizon." },
+      { t: "Porting PIN", d: "A one-time PIN generated by the customer's current provider to authorize transferring their number." },
       { t: "Previous Account Number", d: "The account number associated with the customer's previous wireless provider." },
-      { t: "ETF", acr: "Early Termination Fee", d: "check check The remaining balance owed on a device when service with a current provider is canceled. Verizon offers an ETF buyout program of up to $800 per line for eligible customers who switch." },
-      { t: "Activation Fee", d: "check check A standard Verizon fee of approximately $35 per line for activating service. This fee is fully waived for customers through our channel." }
+      { t: "ETF", acr: "Early Termination Fee", d: "The remaining balance owed on a device when service with a current provider is canceled. AT&T and Verizon CHECK offer an ETF buyout program of up to $800 per line for eligible customers who switch." },
+      { t: "Activation Fee", d: "A standard fee of approximately $35 for AT&T, and CHECK for Verizon, per line for activating service. This fee is fully waived for customers through our channel." }
     ]
   },
   {
@@ -6087,13 +6085,12 @@ const glossary = [
     ]
   },
   {
-    section: "Internal Tech Stack check check",
+    section: "Internal Tech Stack",
     terms: [
       { t: "MST", d: "The quoting software used to build and present service quotes to customers." },
       { t: "SARA Plus", d: "The software platform used to sign and submit customer accounts." },
-      { t: "Knowledge Plus", d: "A resource-based system used for all Verizon-related information and reference material." },
+      { t: "Knowledge Plus", d: "A resoufrce-based system used for all AT&T-related information and reference material." },
       { t: "GoHighLevel", acr: "GHL", d: "The CRM and calling system used for managing leads, contacts, and communications." },
-      { t: "ReadyMode", d: "The power dialer system used on the call floor. Handles outbound dialing, call routing, dispositions, callback scheduling, and DNC syncing. This is where you spend your entire shift." },
       { t: "Sequifi", d: "The payroll and HR platform. Commission statements, pay schedules, onboarding documents, and tax forms all live here." }
     ]
   }
@@ -6172,7 +6169,7 @@ function renderCompliancePage() {
       <p>The Telephone Consumer Protection Act (TCPA) is a federal law that gives consumers the right to sue over unwanted calls and texts. Damages run <strong>$500–$1,500 per violation</strong>, per call, per text. There are law firms whose entire business model is sending people out there trying to bait reps into messing up — one bad call becomes a class action. The rules below aren't bureaucracy. They're the difference between us staying in business and not.</p>
       <div class="cmp-quiz-intro-cta">
         <span class="label">📋 Required: pass the TCPA Compliance Quiz (100%) before your first call.</span>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSf7YvhTw8364vVUT3CthTRDbytEC_aijvwB5g5ABuUzOAMj0Q/viewform" target="_blank" rel="noopener" class="cmp-quiz-intro-btn">Take the Quiz →</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScRapzUW5Nsk6mzp4TWlk-MaoViMz4g65Yz7Bb5WsjE28B5qg/viewform " target="_blank" rel="noopener" class="cmp-quiz-intro-btn">Take the Quiz →</a>
       </div>
     </div>
 
@@ -6375,7 +6372,7 @@ function renderCompliancePage() {
       <div class="cmp-quiz-cta">
         <h3>🛡️ TCPA Compliance Quiz</h3>
         <p>8 questions · Must pass with 100% · Signed and time-stamped to your Google account as a compliance record</p>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSf7YvhTw8364vVUT3CthTRDbytEC_aijvwB5g5ABuUzOAMj0Q/viewform" target="_blank" rel="noopener" class="cmp-quiz-btn">Start the Quiz →</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScRapzUW5Nsk6mzp4TWlk-MaoViMz4g65Yz7Bb5WsjE28B5qg/viewform?usp=header" target="_blank" rel="noopener" class="cmp-quiz-btn">Start the Quiz →</a>
       </div>
 
       <h4>What the quiz covers</h4>
@@ -6862,10 +6859,10 @@ function renderWhyATTPage() {
   const content = document.getElementById('content');
   content.innerHTML = `
     <div class="sec-hero">
-      <div class="crumb">Product Knowledge · Why Verizon Business</div>
+      <div class="crumb">Product Knowledge · Strike Business</div>
       <span class="sec-tag">The Switching Angle</span>
       <h1>Why Verizon Business</h1>
-      <p class="lead">We're not here to tell people Verizon is better than their carrier. We're here to show them that being a <em>new customer</em> is where the money is — and that switching their personal plan to a business plan unlocks prices they didn't know existed.</p>
+      <p class="lead">We're not here to tell people our carrier is better than their carrier. We're here to show them that being a <em>new customer</em> is where the money is — and that switching their personal plan to a business plan unlocks prices they didn't know existed.</p>
     </div>
 
     <div class="pull-quote">
@@ -6999,21 +6996,13 @@ function renderBookItLivePage() {
     <div class="content-block" style="display:flex;gap:16px;align-items:flex-start;">
       <div style="background:#0071e3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">1</div>
       <div>
-        <h3 style="margin-bottom:4px;">Double-click "check check Appointment Booked" in ReadyMode</h3>
-        <p>This sends the contact's data to the CRM. The call stays live — don't hang up.</p>
-      </div>
-    </div>
-
-    <div class="content-block" style="display:flex;gap:16px;align-items:flex-start;">
-      <div style="background:#0071e3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">2</div>
-      <div>
         <h3 style="margin-bottom:4px;">Click the contact in GHL to open their page</h3>
         <p>Contact info is on the left, text messages in the middle, and notes on the right.</p>
       </div>
     </div>
 
     <div class="content-block" style="display:flex;gap:16px;align-items:flex-start;">
-      <div style="background:#0071e3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">3</div>
+      <div style="background:#0071e3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">2</div>
       <div>
         <h3 style="margin-bottom:4px;">Right-click the appointment booking link and open in a new tab</h3>
         <p>The link is in the notes section on the right-hand side of the contact page.</p>
@@ -7021,7 +7010,7 @@ function renderBookItLivePage() {
     </div>
 
     <div class="content-block" style="display:flex;gap:16px;align-items:flex-start;">
-      <div style="background:#0071e3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">4</div>
+      <div style="background:#0071e3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">3</div>
       <div>
         <h3 style="margin-bottom:4px;">Fill out the form — select your calendar, verify the phone number auto-populates</h3>
         <p>Check both required boxes. Leave the appointment notes field empty — use the call details section for context instead.</p>
@@ -7029,7 +7018,7 @@ function renderBookItLivePage() {
     </div>
 
     <div class="content-block" style="display:flex;gap:16px;align-items:flex-start;">
-      <div style="background:#0071e3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">5</div>
+      <div style="background:#0071e3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">4</div>
       <div>
         <h3 style="margin-bottom:4px;">Select the appointment time — watch the time zone</h3>
         <p>The calendar defaults to <strong>your</strong> time zone. If the prospect is in a different zone (e.g., East Coast), adjust accordingly so the appointment lands at the right time for them.</p>
@@ -7037,7 +7026,7 @@ function renderBookItLivePage() {
     </div>
 
     <div class="content-block" style="display:flex;gap:16px;align-items:flex-start;">
-      <div style="background:#0071e3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">6</div>
+      <div style="background:#0071e3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">5</div>
       <div>
         <h3 style="margin-bottom:4px;">Confirm the meeting and verify the confirmation text goes out</h3>
         <p>Once you finalize, a confirmation text fires to the customer. Make sure it sends before you move on.</p>
@@ -7066,7 +7055,7 @@ function renderWarmTransferPage() {
     </div>
 
     <div class="video-block">
-      <h3>📹 Warm Transfer Walkthrough</h3>
+      <h3>📹 Warm Transfer Walkthrough CHECK</h3>
       <div class="vsub">The full step-by-step — from initiating the transfer to submitting the warm transfer form in the CRM.</div>
       <div class="video-embed">
         <iframe loading="lazy" src="https://www.loom.com/embed/d8b1f1c4dfe143849ebe565ccbe67f6a" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
@@ -7093,8 +7082,8 @@ function renderWarmTransferPage() {
     <div class="content-block" style="display:flex;gap:16px;align-items:flex-start;">
       <div style="background:#0071e3;color:#fff;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">2</div>
       <div>
-        <h3 style="margin-bottom:4px;">Click "Warm Transfer" in ReadyMode</h3>
-        <p>Hit the transfer button at the bottom-right of the screen. This opens the list of available closers.</p>
+        <h3 style="margin-bottom:4px;">Click "Warm Transfer" in GHL</h3>
+        <p>Press the down arrow on the dialer, then warm transfer.</p>
       </div>
     </div>
 
