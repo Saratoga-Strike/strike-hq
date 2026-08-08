@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SARA Plus — Wireless Order Training Simulator</title>
+<style>
+  /* ============ BASE ============ */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: #222;
+    background: linear-gradient(#eef3f8, #e3ebf2);
+    min-height: 100vh;
+  }
+  a { color: #1273b8; }
+  input[type="text"], select {
+    border: 1px solid #9ab0c4;
+    border-radius: 2px;
+    padding: 3px 5px;
+    font-size: 12px;
+    font-family: inherit;
+    background: #fff;
+  }
+  input[type="text"]:disabled { background: #e4e4e4; color: #777; }
+  input:focus, select:focus { outline: 2px solid #8ec8ee; }
+
+  /* ============ TRAINING BANNER ============ */
+  .training-banner {
+    background: repeating-linear-gradient(45deg, #b71c1c, #b71c1c 22px, #8e1414 22px, #8e1414 44px);
+    color: #fff; text-align: center; font-weight: bold; font-size: 13px;
+    letter-spacing: 1px; padding: 7px 4px; text-transform: uppercase;
+    border-bottom: 2px solid #6d0f0f;
+  }
+
+  /* ============ TOP NAV ============ */
+  .topnav {
+    background: linear-gradient(#2a8fd0, #0d5c9e);
+    display: flex; align-items: stretch; height: 42px;
+    border-bottom: 2px solid #0a4a80; position: relative;
+  }
+  .logo {
+    background: #fff; border: 2px solid #0a4a80; border-radius: 50%;
+    width: 52px; height: 52px; margin: 2px 14px 0 10px; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; color: #0d5c9e; font-size: 11px; flex-shrink: 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,.35);
+  }
+  .logo span { transform: rotate(-12deg); }
+  .nav-tabs { display: flex; align-items: stretch; }
+  .nav-tab {
+    color: #fff; font-weight: bold; font-size: 13px;
+    padding: 0 14px; display: flex; align-items: center;
+    border-left: 1px solid rgba(255,255,255,.45);
+    cursor: pointer; user-select: none;
+  }
+  .nav-tab:last-child { border-right: 1px solid rgba(255,255,255,.45); }
+  .nav-tab.active { background: linear-gradient(#4aa6dd, #1273b8); box-shadow: inset 0 0 6px rgba(0,0,0,.3); }
+  .nav-tab:hover { background: rgba(255,255,255,.12); }
+  .nav-user {
+    margin-left: auto; color: #fff; font-size: 10px; text-align: right;
+    padding: 4px 12px 0 0; line-height: 1.5;
+  }
+
+  /* ============ CUSTOMER HEADER BAR ============ */
+  .cust-bar-wrap { max-width: 960px; margin: 10px auto 0; padding: 0 8px; }
+  .cust-bar {
+    background: linear-gradient(#9dbbd3, #7da7c8);
+    border: 2px solid #1273b8; border-radius: 4px;
+    display: flex; align-items: center; padding: 7px 14px; gap: 18px;
+    color: #fff; font-weight: bold; font-size: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  }
+  .cust-id .lbl { color: #fff; }
+  .cust-id .val { color: #ffff00; }
+  .cust-icon { font-size: 20px; }
+  .credit-summary { font-size: 10px; font-weight: bold; line-height: 1.45; color: #fff; display: none; }
+  .credit-summary .cs-title { font-size: 11px; }
+  .cust-links { margin-left: auto; display: flex; gap: 60px; padding-right: 30px; }
+  .cust-links span { cursor: pointer; }
+  .cust-links span:hover { text-decoration: underline; }
+
+  /* ============ LAYOUT ============ */
+  .layout { max-width: 960px; margin: 6px auto 40px; padding: 0 8px; display: flex; gap: 12px; align-items: flex-start; }
+  .main-col { flex: 1; min-width: 0; }
+  .main-frame { border: 2px solid #1273b8; border-radius: 5px; background: #fff; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+  .att-band {
+    background: linear-gradient(#3c79c4, #234f92);
+    color: #fff; text-align: center; font-weight: bold; font-size: 14px;
+    padding: 6px; letter-spacing: .5px;
+  }
+  .att-band .globe { display:inline-block; width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #bfe3ff, #57a8e8 60%, #2a6db3); vertical-align: -2px; margin-right: 5px; }
+
+  /* Internet / Wireless tabs */
+  .svc-tabs { display: flex; }
+  .svc-tab {
+    flex: 1; text-align: center; font-weight: bold; font-size: 13px;
+    padding: 8px 4px; color: #0d4d80; cursor: default;
+    background: linear-gradient(#cfe7f7, #9fcdec);
+    border: 1px solid #1273b8;
+  }
+  .svc-tab.wireless { background: linear-gradient(#7fd07f, #3faa44); color: #fff; }
+  .svc-tab .gear { display:inline-block; background:#2b7fc2; color:#fff; border-radius:50%; width:16px; height:16px; line-height:16px; font-size:10px; margin-right:5px; }
+
+  /* Stepper */
+  .stepper { display: flex; border: 1px solid #aac4d8; margin: 5px 6px; border-radius: 3px; overflow: hidden; background: #fff; }
+  .step {
+    flex: 1; position: relative; padding: 6px 8px 6px 22px;
+    font-size: 12px; color: #999; background: #fff; white-space: nowrap;
+  }
+  .step:first-child { padding-left: 12px; }
+  .step::after {
+    content: ""; position: absolute; right: -10px; top: 0; z-index: 2;
+    width: 0; height: 0;
+    border-top: 13px solid transparent; border-bottom: 13px solid transparent;
+    border-left: 10px solid #fff;
+    filter: drop-shadow(2px 0 0 #aac4d8);
+  }
+  .step:last-child::after { display: none; }
+  .step.done { color: #333; font-weight: normal; }
+  .step.active { color: #0d4d80; font-weight: bold; background: linear-gradient(#fff, #d9edf9); }
+  .step.active::after { border-left-color: #d9edf9; }
+
+  /* Content area */
+  .content { padding: 8px 8px 12px; background: #fff; }
+  .band {
+    background: linear-gradient(#2f8ecb, #1273b8);
+    color: #fff; font-weight: bold; text-align: center;
+    padding: 5px; font-size: 13px; border-radius: 1px;
+  }
+  .band.sub { background: linear-gradient(#5aa9dd, #2f8ecb); font-size: 12px; }
+  .panel { background: linear-gradient(#f2f2f2, #e2e2e2); border: 1px solid #c5c5c5; border-top: none; padding: 12px 16px; }
+  .row { display: flex; align-items: center; gap: 8px; margin: 7px 0; flex-wrap: wrap; }
+  .row label { font-weight: bold; }
+  .center { text-align: center; }
+  .note-blue { color: #2b3fd4; font-style: italic; font-size: 11.5px; }
+  .note-purple { color: #7a3fd4; }
+  .req { color: #c00; }
+  .green { color: #1d9b27; font-weight: bold; }
+  .orange { color: #e8862a; font-weight: bold; }
+  .check { color: #2faa35; font-weight: bold; }
+
+  /* Buttons */
+  .pill {
+    display: inline-block; background: linear-gradient(#fdfdfd, #cfe2ef);
+    border: 1px solid #1273b8; border-radius: 14px;
+    color: #0d4d80; font-weight: bold; font-size: 11px;
+    padding: 4px 14px; cursor: pointer; font-family: inherit;
+  }
+  .pill:hover:not(:disabled) { background: linear-gradient(#fff, #b9d8ec); }
+  .pill:disabled { opacity: .45; cursor: not-allowed; }
+  .pill.selected { background: linear-gradient(#2f8ecb, #1273b8); color: #fff; }
+  .nav-btn {
+    background: linear-gradient(#e9f4fb, #a8cce6 60%, #8cb9da);
+    border: 1px solid #5a89ab; border-radius: 18px;
+    color: #0d4d80; font-weight: bold; font-size: 14px;
+    padding: 8px 26px; cursor: pointer; font-family: inherit;
+    box-shadow: 0 2px 3px rgba(0,0,0,.25);
+  }
+  .nav-btn:hover:not(:disabled) { background: linear-gradient(#f4fafe, #b9d8ec 60%, #9cc5e2); }
+  .nav-btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-green {
+    background: linear-gradient(#8edc8e, #3faa44 60%, #2f8c34);
+    border: 1px solid #2a7a2e; border-radius: 18px;
+    color: #fff; font-weight: bold; font-size: 14px;
+    padding: 8px 26px; cursor: pointer; font-family: inherit;
+    text-shadow: 0 1px 1px rgba(0,0,0,.3); box-shadow: 0 2px 3px rgba(0,0,0,.25);
+  }
+  .btn-green:hover:not(:disabled) { background: linear-gradient(#a0e6a0, #4cba51 60%, #379a3c); }
+  .btn-green:disabled { opacity: .5; cursor: not-allowed; }
+  .footer-btns { display: flex; justify-content: space-between; padding: 12px 6px 4px; }
+  .footer-btns.end { justify-content: flex-end; }
+
+  /* Secure data link */
+  .secure-link { display: inline-flex; align-items: center; gap: 6px; font-weight: bold; cursor: pointer; }
+  .secure-link .shield {
+    display: inline-block; width: 17px; height: 17px; border: 2px solid #1273b8; border-radius: 3px 3px 50% 50%;
+    color: #1273b8; font-size: 11px; line-height: 14px; text-align: center; font-weight: bold;
+  }
+  .secure-link u { color: #1273b8; }
+
+  /* ============ CART ============ */
+  .cart-col { width: 215px; flex-shrink: 0; }
+  .cart-action { text-align: center; margin-bottom: 6px; }
+  .cart { border: 2px solid #0d4d80; background: #fff; border-radius: 2px; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
+  .cart .c-band { background: linear-gradient(#2f8ecb, #1273b8); color: #fff; font-weight: bold; text-align: center; font-size: 11px; padding: 3px; border-bottom: 1px solid #fff; }
+  .cart .c-band.oid span { color: #ffff00; }
+  .cart .c-band.dark { background: linear-gradient(#1d6aa8, #0d4d80); }
+  .cart .c-band.line { background: linear-gradient(#7ab4dd, #4a92c6); font-size: 10.5px; }
+  .c-item { display: flex; justify-content: space-between; font-size: 10px; padding: 2px 5px 0; font-weight: bold; }
+  .c-item .price { color: #1d9b27; }
+  .c-item .price.discount { color: #c00; }
+  .c-item .price.charge { color: #c00; }
+  .c-note { font-size: 8.5px; color: #2b3fd4; padding: 0 5px 3px; line-height: 1.25; }
+  .c-total { display: flex; justify-content: space-between; font-size: 10.5px; padding: 3px 5px; border-top: 1px solid #999; }
+  .c-total .tl { font-weight: normal; }
+  .c-total.grand { font-weight: bold; background: #efefef; }
+  .c-total .price { color: #1d9b27; font-weight: bold; }
+  .c-foot { font-size: 8px; color: #444; padding: 2px 5px 5px; line-height: 1.3; }
+
+  /* ============ BUILD ORDER LINES ============ */
+  .line-card { margin-bottom: 8px; }
+  .line-head {
+    background: linear-gradient(#2f8ecb, #1273b8); color: #fff;
+    display: flex; align-items: center; padding: 4px 8px;
+    font-weight: bold; font-size: 12.5px;
+  }
+  .line-head .gear { background:#7ab4dd; border-radius:50%; width:16px; height:16px; line-height:16px; text-align:center; font-size:10px; margin-right:8px; }
+  .line-head .title { flex: 1; text-align: center; }
+  .line-head .x { cursor: pointer; font-size: 15px; padding: 0 4px; }
+  .line-head .x:hover { color: #ffd0d0; }
+  .line-body { background: linear-gradient(#f4f4f4, #e6e6e6); border: 1px solid #c5c5c5; border-top: none; padding: 10px 14px; }
+  .dev-btns { text-align: center; margin: 4px 0 8px; }
+  .dev-btns .pill { margin: 0 6px; }
+  .port-box { border: 1px solid #9ab0c4; border-radius: 6px; padding: 8px 12px; margin: 8px 0; max-width: 480px; }
+  .port-grid { display: grid; grid-template-columns: auto 1fr; gap: 6px 8px; align-items: center; margin-top: 6px; }
+  .port-grid label { font-weight: bold; text-align: right; }
+  .charges-box {
+    border: 1px solid #1273b8; border-radius: 3px; background: #fafdff;
+    padding: 8px 12px; width: 215px; float: right; margin: 0 0 8px 12px;
+    font-size: 11.5px;
+  }
+  .charges-box h4 { text-align: center; font-size: 12.5px; margin-bottom: 6px; }
+  .charges-box .cb-row { display: flex; justify-content: space-between; margin: 3px 0; }
+  .charges-box .cb-row .v { color: #2b3fd4; font-weight: bold; }
+  .instock {
+    background: #f5a623; color: #103a5c; font-weight: bold; padding: 2px 8px;
+    border-radius: 2px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;
+  }
+  .promo-wrap { margin: 8px 0; }
+  .promo-disclosure { font-size: 11px; text-align: center; padding: 8px 24px; line-height: 1.45; }
+  .promo-card { margin: 8px 18px; }
+  .promo-card .p-band { background: linear-gradient(#8ec6e8, #4a9cd4); color: #fff; font-weight: bold; text-align: center; padding: 3px; font-size: 12px; }
+  .promo-card .p-body { text-align: center; font-size: 11.5px; padding: 6px 14px; }
+  .promo-card .p-chk { font-size: 11px; margin: 4px 0; }
+  .promo-card .p-link { font-size: 10.5px; }
+  .placeholder-text {
+    background: #fff8d6; border: 1px dashed #c9a227; color: #7a6210;
+    padding: 6px 10px; font-style: italic; font-size: 11px; border-radius: 3px;
+    display: inline-block; margin: 3px 0;
+  }
+  .add-line-band { background: linear-gradient(#2f8ecb, #1273b8); height: 16px; }
+  .add-line-row { text-align: center; padding: 8px; background: linear-gradient(#f4f4f4, #e6e6e6); border: 1px solid #c5c5c5; border-top: none; }
+  .show-info { font-size: 11px; font-weight: bold; }
+
+  /* misc */
+  .screen { display: none; }
+  .screen.visible { display: block; }
+  .status-banner-green {
+    background: linear-gradient(#8edc8e, #3faa44); color: #fff; font-weight: bold;
+    text-align: center; padding: 4px; font-size: 12.5px; text-decoration: underline;
+    border: 1px solid #2a7a2e; margin-bottom: 2px;
+  }
+  .notice-yellow { background: #fdf6c9; border: 1px solid #e0d27a; text-align: center; font-weight: bold; padding: 7px; font-size: 12px; }
+  .notice-complete {
+    background: #0b3050; border: 1px solid #082238; color: #39e639;
+    text-align: center; font-weight: bold; text-decoration: underline;
+    padding: 7px; font-size: 12.5px;
+  }
+  .notice-orange { background: #f5a623; color: #5a3a00; font-weight: bold; font-size: 11.5px; padding: 6px 10px; display: inline-block; }
+  .conf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; padding: 8px 14px; background: linear-gradient(#f4f4f4,#e9e9e9); border: 1px solid #c5c5c5; border-top: none; }
+  .conf-grid .cg { font-weight: bold; }
+  .conf-grid .cg span { color: #2b3fd4; }
+  .sum-line-body { background: linear-gradient(#f4f4f4,#e9e9e9); border: 1px solid #c5c5c5; border-top: none; padding: 6px 30px; }
+  .sum-line-body div { margin: 3px 0; font-weight: bold; }
+  .sum-line-body div span { color: #2b3fd4; }
+
+  /* ============ SEARCH RESULTS GRID ============ */
+  .results-grid { width: 100%; border-collapse: collapse; margin-top: 10px; background: #fff; font-size: 12px; }
+  .results-grid td { border: 1px solid #b5c4d0; padding: 5px 8px; }
+  .results-grid tr.rg-head td { background: #dfe6ec; font-weight: bold; }
+  .lock-val { color: #2b3fd4; font-weight: bold; }
+
+  /* ============ SERVICES AVAILABLE MODAL ============ */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(70,70,70,.55); z-index: 200;
+    display: flex; align-items: flex-start; justify-content: center; padding-top: 60px;
+  }
+  .svc-modal {
+    width: 700px; max-width: 94vw; max-height: 85vh; overflow: auto;
+    background: #cdd6de; border: 1px solid #6a7b88; box-shadow: 0 6px 30px rgba(0,0,0,.5);
+  }
+  .svc-title {
+    background: linear-gradient(#7193ab, #52768f); color: #fff; font-weight: bold;
+    font-size: 12.5px; padding: 5px 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .svc-title .svc-x {
+    margin-left: auto; cursor: pointer; background: #e8edf1; color: #333;
+    border: 1px solid #888; padding: 0 6px; font-size: 11px; font-weight: bold;
+  }
+  .svc-inner { padding: 10px 12px; }
+  .svc-addr { background: #fff; border: 1px solid #999; text-align: center; font-weight: bold; font-size: 12.5px; padding: 5px; margin-bottom: 10px; line-height: 1.5; }
+  .svc-band { background: linear-gradient(#2f8ecb, #1273b8); color: #fff; font-weight: bold; padding: 4px 8px; font-size: 12.5px; }
+  .svc-band.voice { background: linear-gradient(#f5a623, #e08c00); }
+  .svc-row { background: #fff; border: 1px solid #999; border-top: none; padding: 6px 8px; font-size: 12px; }
+  .svc-table { width: 100%; border-collapse: collapse; background: #fff; font-size: 12px; border: 1px solid #999; border-top: none; }
+  .svc-table th, .svc-table td { border-bottom: 1px solid #ccc; padding: 5px 8px; text-align: left; }
+  .svc-table th { border-bottom: 2px solid #555; }
+  .svc-table .pr { text-align: right; white-space: nowrap; }
+  .svc-foot { background: #fff; border: 1px solid #999; border-top: none; text-align: right; font-style: italic; font-size: 10.5px; padding: 3px 8px; }
+
+  /* ============ TRAINING COACH TIPS ============ */
+  .coach-tip {
+    position: absolute; z-index: 99; max-width: 300px;
+    background: #fff; border: 2px solid #c00; border-radius: 5px;
+    padding: 8px 26px 8px 12px; box-shadow: 0 3px 10px rgba(0,0,0,.35);
+    color: #c00; font-weight: bold; font-size: 12px; line-height: 1.4;
+    animation: coachIn .25s ease-out;
+  }
+  @keyframes coachIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+  .coach-tip .ct-label {
+    display: block; width: max-content; font-size: 10px; letter-spacing: 1px;
+    background: #c00; color: #fff; padding: 1px 6px; border-radius: 3px; margin-bottom: 4px;
+  }
+  .coach-tip .ct-x { position: absolute; top: 4px; right: 7px; cursor: pointer; color: #c00; font-weight: bold; font-size: 13px; }
+  .coach-tip::before {
+    content: ""; position: absolute; top: -8px; left: 18px;
+    border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 8px solid #c00;
+  }
+
+  .timer-chip {
+    position: fixed; bottom: 14px; left: 14px; background: #fff; border: 2px solid #0d5c9e;
+    border-radius: 6px; padding: 3px 10px 3px 6px; font-weight: bold; font-size: 13px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.3); display: flex; align-items: center; gap: 5px;
+  }
+  .timer-chip .dot { width: 16px; height: 16px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #6cb6e8, #0d5c9e); }
+  .chat-bubble {
+    position: fixed; bottom: 14px; right: 18px; width: 46px; height: 46px; border-radius: 50%;
+    background: linear-gradient(#3c9bd8, #1273b8); box-shadow: 0 2px 6px rgba(0,0,0,.35);
+    display: flex; align-items: center; justify-content: center; color: #fff; font-size: 19px;
+  }
+</style>
+</head>
+<body>
+
+<div class="training-banner">⚠ Training Sandbox — Not a Live System ⚠ &nbsp;No data is stored, validated, or transmitted</div>
+
+<div class="topnav">
+  <div class="logo"><span>SARA<br>Plus</span></div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" id="navOrders">Orders</div>
+    <div class="nav-tab">Analytics</div>
+    <div class="nav-tab">Customers</div>
+    <div class="nav-tab">My Profile</div>
+    <div class="nav-tab">Support</div>
+  </div>
+  <div class="nav-user">training.rep@example.com<br>IP: 0.0.0.0 &nbsp;🆔</div>
+</div>
+
+<div class="cust-bar-wrap">
+  <div class="cust-bar">
+    <div class="cust-icon">👥</div>
+    <div class="cust-id">
+      <div><span class="lbl">Name: </span><span class="val" id="hdrName"></span></div>
+      <div><span class="lbl">Phone: </span><span class="val" id="hdrPhone"></span></div>
+    </div>
+    <div class="credit-summary" id="creditSummary">
+      <div class="cs-title">◎ Credit Summary</div>
+      <div>BAN: 287361926636</div>
+      <div>Order #: 99-100000078009750</div>
+      <div>Credit Reference #: 511177243004</div>
+      <div>Dealer Code: 8VWYU</div>
+      <div>FAN: 67069358</div>
+    </div>
+    <div class="cust-links">
+      <span>Comments</span><span>Disposition</span><span>Sales Help</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="main-col">
+    <div class="main-frame">
+      <div class="att-band" id="attBand"><span class="globe"></span>AT&amp;T</div>
+      <div class="svc-tabs" id="svcTabs">
+        <div class="svc-tab">Internet</div>
+        <div class="svc-tab wireless"><span class="gear">⚙</span>Wireless</div>
+      </div>
+      <div class="stepper" id="stepper">
+        <div class="step" id="step0">Account Option</div>
+        <div class="step" id="step1">Business Verification</div>
+        <div class="step" id="step2">Build Order</div>
+        <div class="step" id="step3">Summary</div>
+      </div>
+      <div class="content">
+
+        <!-- ============ SCREEN 1: CUSTOMER INFORMATION ============ -->
+        <div class="screen" id="screen-1">
+          <div class="band">Order Options</div>
+          <div class="panel">
+            <div class="row" style="justify-content:space-between;">
+              <span><label>Campaign: </label>
+                <select id="inCampaign"><option>Onyx Fiber (BR3)</option><option>SBS Onyx Fiber (BR3)</option></select>
+              </span>
+              <span><label>Salesperson: </label>
+                <input type="text" value="Training Rep" disabled class="perm-dis" style="width:160px;">
+              </span>
+            </div>
+          </div>
+          <div class="band">Customer Type Selection</div>
+          <div class="panel center">
+            <div class="row" style="justify-content:center; gap:30px;">
+              <span><label>Customer Type</label><br><span class="note-blue" style="font-style:italic;">please click an option</span></span>
+              <span id="typeSMB" style="cursor:pointer; text-align:center;">
+                <span style="font-size:22px;">🏢</span><br><b>SMB</b><br><span class="green" id="smbSel" style="font-size:9px;">SELECTED</span>
+              </span>
+              <span id="typeConsumer" style="cursor:pointer; text-align:center;">
+                <span style="font-size:22px;">👤</span><br><b>Consumer</b><br><span class="green" id="consSel" style="font-size:9px; visibility:hidden;">SELECTED</span>
+              </span>
+            </div>
+          </div>
+          <div class="band">Customer Information</div>
+          <div class="panel" style="background:#fff; padding:8px 16px;">
+            <span class="secure-link" id="secureLink1"><span class="shield">S</span><u>Send Secure Data collection link</u><span class="check" id="secureSent1" style="display:none;">&nbsp;✓ Link sent</span></span>
+          </div>
+          <div class="panel">
+            <div class="row" style="justify-content:center; gap:40px;">
+              <span><label>Primary Phone: </label><input type="text" id="inPhone" placeholder="___-___-____" style="width:110px;"> 🔍</span>
+              <span><label>Alternate Phone: </label><span style="font-size:10px; font-style:italic;">(optional)</span> <input type="text" placeholder="___-___-____" style="width:110px;"></span>
+            </div>
+            <div class="row"><label>Read to Customer:</label></div>
+            <div class="row" style="justify-content:space-between;">
+              <span>May the service provider use your contact info to reach you by phone or text with information about your account?</span>
+              <span><label><input type="radio" name="contactok" checked> Yes</label> <label><input type="radio" name="contactok"> No</label></span>
+            </div>
+            <div class="row" style="justify-content:center; gap:20px;">
+              <span><label>First Name: </label><input type="text" id="inFirst" style="width:110px;"></span>
+              <span><label>Last Name: </label><input type="text" id="inLast" style="width:110px;"> 🔍</span>
+              <span><label>Email: </label><input type="text" id="inEmail" style="width:160px;"> ✉️</span>
+            </div>
+            <div class="row center" style="justify-content:center;"><i>Name and Email above must be the business owner or an authorized user.</i></div>
+            <div class="row" style="justify-content:center; gap:20px;">
+              <span><label>Business Name: </label><input type="text" id="inBizName" style="width:130px;"></span>
+              <span><label>EIN/Tax ID: </label><input type="text" id="inEin" placeholder="00-0000000" maxlength="10" style="width:100px;"></span>
+              <span><label>Business Type: </label>
+                <select><option>Corporation</option><option>LLC</option><option>Sole Proprietorship</option><option>Partnership</option><option>Non-Profit</option></select>
+              </span>
+            </div>
+          </div>
+          <div class="band" id="bandAddr">Registered Business Address</div>
+          <div class="panel">
+            <div class="row" style="justify-content:center;">
+              <label>Service Address: </label><input type="text" id="inAddr" placeholder="eg. 10425 Plano Rd suite 100 Dallas TX" style="width:280px;"> 🔍<span class="check" id="addrCheck" style="display:none;">&nbsp;✔</span>
+            </div>
+            <div class="row" style="justify-content:center; gap:20px;">
+              <span><label>Unit: </label><input type="text" id="inUnit" style="width:50px;"></span>
+              <span><label>Zip: </label><input type="text" id="inZip" style="width:80px;"></span>
+              <span><label>City: </label><input type="text" id="inCity" style="width:110px;"><span class="lock-val" id="cityLock" style="display:none;"></span></span>
+              <span><label>State: </label><input type="text" id="inState" style="width:40px;"><span class="lock-val" id="stateLock" style="display:none;"></span></span>
+            </div>
+            <div class="row" style="justify-content:center;"><button class="pill" type="button" id="btnSvcAvail">◌ Service Availability</button></div>
+            <div class="row" style="justify-content:center; display:none;" id="editCustRow"><button class="pill" type="button" id="btnEditCust">Edit Customer Data</button></div>
+            <div class="row" style="justify-content:center;">
+              <button class="nav-btn" id="btnSearchCustomer">Search for Customer</button>
+            </div>
+            <div class="row center" style="justify-content:center; color:#c00; font-weight:bold; display:none;" id="s1Err"></div>
+            <div id="searchResults" style="display:none;">
+              <table class="results-grid">
+                <tr class="rg-head"><td style="width:60px;"></td><td>Customer Name</td><td>Address</td><td>Phone</td><td>Date Entered</td><td>Credit Run</td></tr>
+                <tr>
+                  <td><button class="pill" type="button" id="btnSelectCust">Select</button></td>
+                  <td>NEW CUSTOMER</td>
+                  <td id="rgAddr"></td>
+                  <td id="rgPhone"></td>
+                  <td id="rgDate"></td>
+                  <td></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div id="selectAccountBlock" style="display:none;">
+            <div class="band">Select Account</div>
+            <div class="panel center">
+              <div class="row" style="justify-content:center;">
+                <label>Vendor Account: </label>
+                <select style="max-width:360px;"><option>FFL-1801829838-RES-FFL-ZMLB6-SBS-C - RSI -</option></select>
+              </div>
+              <div class="row" style="justify-content:center;">
+                <button class="btn-green" id="btnBuildOffer">Build Sales Offer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN 2: ACCOUNT OPTION ============ -->
+        <div class="screen" id="screen-2">
+          <div class="panel" style="border-top:1px solid #c5c5c5; text-align:center; padding:28px 16px;">
+            <button class="btn-green" id="btnNewAccount" style="font-size:16px; padding:10px 44px;">NEW ACCOUNT</button>
+            <div class="green" id="newAcctSel" style="visibility:hidden; margin-top:6px;">✓ New Account selected</div>
+          </div>
+          <div class="footer-btns">
+            <button class="pill" type="button">Clear Mobile Selection</button>
+            <button class="nav-btn" data-next="3">Next &nbsp;&gt;&gt;&gt;</button>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN 3: BUSINESS VERIFICATION ============ -->
+        <div class="screen" id="screen-3">
+          <div class="band">Business Verification</div>
+          <div class="panel">
+            <div class="row center" style="justify-content:center;"><b>Verify business name and address on two specific internet-screening sites.</b></div>
+            <div class="row" style="justify-content:center;">
+              <label style="width:80px;">Source 1:</label>
+              <select id="src1" style="width:200px;"><option>Select a source</option><option>Google</option><option>Secretary of State Business Search</option><option>Hoovers</option><option>YP.com</option><option>D&amp;B</option><option>BBB.org</option><option>Yelp Business</option></select>
+              <a href="javascript:void(0)" id="srcLink1" style="display:none; margin-left:30px; font-weight:bold;">Click here to use source and validate</a>
+            </div>
+            <div class="row" style="justify-content:center;">
+              <label style="width:80px;">Source 2:</label>
+              <select id="src2" style="width:200px;"><option>Select a source</option><option>Google</option><option>Secretary of State Business Search</option><option>Hoovers</option><option>YP.com</option><option>D&amp;B</option><option>BBB.org</option><option>Yelp Business</option></select>
+              <a href="javascript:void(0)" id="srcLink2" style="display:none; margin-left:30px; font-weight:bold;">Click here to use source and validate</a>
+            </div>
+            <div style="font-size:11px; margin:10px 0 0 40px; line-height:2;">
+              <div><label><input type="checkbox"> Was the applicant's purchase authority confirmed via phone call to the number found in the online business directory (ex: Hoovers, YP.com, D&amp;B)</label></div>
+              <div><label><input type="checkbox"> Was a secondary identification verified (ex: business license, article of incorporation, federal tax ID certificate, etc.)?</label></div>
+              <div><label><i><input type="checkbox"> Business Authority and/or Identity validation is unable to be completed. Order cannot be completed at this time.</i></label></div>
+            </div>
+          </div>
+          <div class="footer-btns">
+            <button class="nav-btn" data-prev="2">&lt;&lt;&lt; Previous</button>
+            <button class="nav-btn" data-next="4">Next &nbsp;&gt;&gt;&gt;</button>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN 4: CREDIT CHECK ============ -->
+        <div class="screen" id="screen-4">
+          <div class="band">AT&amp;T Wireless Lines</div>
+          <div class="panel">
+            <div class="row" style="justify-content:center;">
+              <label>Wireless Lines Requested: </label>
+              <select><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select>
+            </div>
+            <div class="row center note-blue" style="justify-content:center;">Please select the max number of lines the customer has requested.</div>
+            <div class="row" style="justify-content:center;"><b>Do you have any existing numbers to be ported on today's order?</b></div>
+            <div class="row" style="justify-content:center;">
+              <label><input type="radio" name="ccport" checked> Yes</label> <label><input type="radio" name="ccport"> No</label>
+            </div>
+            <div class="row center" style="justify-content:center; color:#2b3fd4;"><i>At least one line <b>must</b> be ported in order to complete the order.</i></div>
+            <div class="row" style="justify-content:center; gap:30px;">
+              <span><label>Contact Phone: <span class="req">*</span> </label><input type="text" id="ccPhone" style="width:110px;"></span>
+              <span><label>Email Address: <span class="req">*</span> </label><input type="text" id="ccEmail" style="width:190px;"> ✉️</span>
+            </div>
+            <div class="row" style="justify-content:flex-start; gap:14px;">
+              <label>Billing Preference:</label>
+              <label><input type="radio" name="ccbill" checked> English</label>
+              <label><input type="radio" name="ccbill"> Spanish</label>
+            </div>
+            <div class="row"><label style="font-weight:normal;"><input type="checkbox"> Use a different Billing/Previous address (this is not common)</label></div>
+          </div>
+          <div class="band">Personal Information</div>
+          <div class="panel">
+            <div class="row"><b>You must read the statements below to the customer verbatim:</b></div>
+            <div class="row" style="justify-content:center;">
+              <span class="placeholder-text" id="ccScript">[ PLACEHOLDER — insert your approved verbatim credit-consent script here ]</span>
+            </div>
+            <div class="row" style="justify-content:center; gap:14px;">
+              <b>"Is that okay?"</b>
+              <label><input type="radio" name="ccok" id="ccokYes"> Yes</label>
+              <label><input type="radio" name="ccok" checked> No</label>
+            </div>
+          </div>
+          <div id="ccExtra" style="display:none;">
+            <div class="panel" style="border-top:none;">
+              <div class="row">
+                <span class="secure-link" id="secureLink4"><span class="shield">S</span><u>Refresh Secure Data collection</u><span class="check" id="secure4Ok" style="display:none;">&nbsp;✔</span></span>
+                <i>Link sent. Customer must validate.</i>
+                <label>PIN: </label><input type="text" id="ccPin" style="width:60px;">
+                <button class="pill" type="button" id="btnValidatePin">Validate Pin</button>
+                <span class="check" id="pinOk" style="display:none;">✓ Validated</span>
+              </div>
+            </div>
+            <div class="band">Secure Passcode</div>
+            <div class="panel">
+              <div class="row center" style="display:block;">
+                In order to keep the customer's AT&amp;T account as secure as possible, a passcode is required to be created.<br>
+                Please enter and confirm your passcode below.<br>
+                <i>Your passcode must be between 4 and 8 digits long (numbers only).</i>
+              </div>
+              <div class="row" style="justify-content:center; gap:16px;">
+                <span><label>Enter: </label><input type="text" style="width:70px;"></span>
+                <span><label>Confirm: </label><input type="text" style="width:70px;"></span>
+              </div>
+            </div>
+            <div class="band">Birthdate</div>
+            <div class="panel center">
+              <div class="row" style="justify-content:center;">AT&amp;T requires a Date of Birth be collected for all customers.</div>
+              <div class="row" style="justify-content:center;">
+                <input type="text" placeholder="MM" style="width:36px;"> / <input type="text" placeholder="DD" style="width:36px;"> / <input type="text" placeholder="YYYY" style="width:56px;">
+              </div>
+            </div>
+            <div class="band">Identification Information</div>
+            <div class="panel">
+              <div class="port-grid" style="max-width:380px; margin:0 auto;">
+                <label>Tax ID:</label><span><input type="text" value="******6608" disabled style="width:110px;"></span>
+                <label>Photo ID Type:</label><span><select><option>Driver's License</option><option>State ID</option><option>Passport</option><option>Military ID</option></select></span>
+                <label>ID Number:</label><span><input type="text" style="width:130px;"></span>
+                <label>Issuing Authority:</label><span><select><option>Select</option><option>CA</option><option>TX</option><option>AZ</option><option>NV</option><option>FL</option><option>NY</option></select></span>
+                <label>Expiration Date:</label>
+                <span>
+                  <select><option>Select</option><option>01</option><option>02</option><option>03</option><option>04</option><option>05</option><option>06</option><option>07</option><option>08</option><option>09</option><option>10</option><option>11</option><option>12</option></select> /
+                  <select><option>Select</option><option>01</option><option>05</option><option>10</option><option>15</option><option>20</option><option>25</option><option>28</option></select> /
+                  <select><option>Select</option><option>2026</option><option>2027</option><option>2028</option><option>2029</option><option>2030</option><option>2031</option></select>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row center" style="justify-content:center; color:#c00; font-weight:bold; display:none;" id="gateHint4">Select "Yes" and click "Refresh Secure Data collection" to continue.</div>
+          <div class="footer-btns">
+            <button class="nav-btn" data-prev="3">&lt;&lt;&lt; Previous</button>
+            <button class="nav-btn" data-next="5">Next &nbsp;&gt;&gt;&gt;</button>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN 5: ID AUTHENTICATION ============ -->
+        <div class="screen" id="screen-5">
+          <div class="band">Photo ID Authentication</div>
+          <div class="panel center" style="background:#fff;">
+            <div>AT&amp;T is requiring additional ID Authentication to continue with this order.</div>
+            <div><a href="javascript:void(0)">What is ID Authentication?</a></div>
+          </div>
+          <div class="band">Automated ID Authentication</div>
+          <div class="panel">
+            <div class="row center" style="display:block;">An automated ID authentication requires a mobile phone number or an email where the customer can receive an SMS text message or an email.</div>
+            <div class="row" style="justify-content:center;">
+              <label>Mobile Phone Number: </label><input type="checkbox" id="idaMobChk" checked> <input type="text" id="idaMob" style="width:120px;">
+            </div>
+            <div class="row" style="justify-content:center;">
+              <label>Email Address: </label><input type="checkbox" id="idaEmailChk"> <input type="text" id="idaEmail" style="width:190px;" disabled> ✉️
+            </div>
+            <div class="row" style="justify-content:center;">
+              <button class="pill" type="button" id="btnSendIdAuth">Send ID Authentication Link</button>
+            </div>
+            <div class="row center green" id="idaSent" style="display:none; justify-content:center;">✓ ID Authentication Link sent — customer verified (training)</div>
+          </div>
+          <div class="row center" style="justify-content:center; color:#c00; font-weight:bold; display:none;" id="gateHint5">Click "Send ID Authentication Link" to continue — the customer must complete this on their end.</div>
+          <div class="footer-btns">
+            <button class="nav-btn" data-prev="4">&lt;&lt;&lt; Previous</button>
+            <button class="nav-btn" data-next="6">Next &nbsp;&gt;&gt;&gt;</button>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN 6: BUSINESS AGREEMENT ============ -->
+        <div class="screen" id="screen-6">
+          <div class="band">AT&amp;T Mobile Business Agreement</div>
+          <div class="panel" style="background:#fff; padding:8px 16px;">
+            <span class="secure-link" id="secureLink6"><span class="shield">S</span><u>Refresh Secure Data collection</u><span class="check" id="agreeCheck" style="display:none;">&nbsp;✔</span></span>
+            <div id="agreeDoneLine" style="display:none; text-align:center; font-weight:bold; margin-top:8px;">AT&amp;T Mobile Business Agreement has been completed by the Customer.</div>
+            <hr style="border:none; border-top:1px solid #1273b8; margin:10px 0 0;">
+          </div>
+          <div class="panel center" style="padding:18px 16px;">
+            <div style="font-style:italic; margin-bottom:14px;">AT&amp;T Mobile Business Agreement is completed by the customer.</div>
+            <div style="font-style:italic; margin-bottom:20px;">This page will auto refresh until customer has completed the agreement process.</div>
+            <div style="font-size:15px;"><b>AT&amp;T Mobile Business Agreement Status:</b> &nbsp;<span id="agreeStatus" style="color:#555;">Pending</span></div>
+          </div>
+          <div class="row center" style="justify-content:center; color:#c00; font-weight:bold; display:none;" id="gateHint6">Click "Refresh Secure Data collection" to complete the agreement before continuing.</div>
+          <div class="footer-btns">
+            <button class="nav-btn" data-prev="5">&lt;&lt;&lt; Previous</button>
+            <button class="nav-btn" data-next="7">Next &nbsp;&gt;&gt;&gt;</button>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN 7: BUILD ORDER ============ -->
+        <div class="screen" id="screen-7">
+          <div id="linesContainer"></div>
+          <div class="add-line-band"></div>
+          <div class="add-line-row">
+            <button class="pill" type="button" id="btnAddLine" style="font-size:13px; padding:5px 20px;">Add Line</button>
+            <div class="note-blue" id="maxLineNote" style="display:none; margin-top:4px;">Maximum of 4 lines reached.</div>
+          </div>
+          <div class="footer-btns">
+            <button class="nav-btn" data-prev="6">&lt;&lt;&lt; Previous</button>
+            <button class="nav-btn" data-next="8">Next &nbsp;&gt;&gt;&gt;</button>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN 8: SUMMARY ============ -->
+        <div class="screen" id="screen-8">
+          <div class="band">Wireless Summary &amp; Finalization</div>
+          <div id="summaryHead" class="conf-grid"></div>
+          <div id="summaryLines"></div>
+          <div class="footer-btns">
+            <button class="nav-btn" data-prev="7">&lt;&lt;&lt; Previous</button>
+            <span class="note-blue" style="align-self:center;">Use the green <b>Finalize &gt;&gt;&gt;</b> button at the top of the cart to continue.</span>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN 9: PAYMENT ============ -->
+        <div class="screen" id="screen-9">
+          <div class="band">Payment Information</div>
+          <div class="panel" style="background:#fff;">
+            <div class="row"><b style="text-decoration:underline;">Today's Charges:</b> <span style="color:#2b3fd4; font-weight:bold;">$0.00</span></div>
+            <div class="row">
+              <span class="secure-link" id="secureLink9"><span class="shield">S</span><u>Refresh Secure Data collection</u></span>
+              <span id="paySpin">◌</span>
+              <i id="payMsg">Customer has started. Page will auto load when customer is finished.</i>
+            </div>
+            <div class="row"><span class="notice-orange">Secure Data is required based on current dealer settings.</span></div>
+            <div class="row" style="justify-content:center;">There is no payment required at this time for this order.</div>
+          </div>
+          <div class="band">Autopay/Paperless Billing Setup</div>
+          <div class="panel">
+            <div class="row"><b style="text-decoration:underline;">AT&amp;T Wireless:</b> <span class="orange" id="autopayStatus">Not started yet</span></div>
+            <div class="row" style="gap:14px;">
+              <label>Card Number <span style="font-weight:normal; font-size:10px;">(training dummy — type anything)</span>:</label>
+              <input type="text" style="width:150px;">
+              <label>Exp:</label><input type="text" placeholder="MM/YY" style="width:55px;">
+              <label>Zip:</label><input type="text" style="width:60px;">
+            </div>
+          </div>
+          <div class="row center" style="justify-content:center; color:#c00; font-weight:bold; display:none;" id="gateHint9">Click "Refresh Secure Data collection" before processing the order.</div>
+          <div class="footer-btns">
+            <button class="nav-btn" data-prev="8">&lt;&lt;&lt; Previous</button>
+            <span class="note-blue" style="align-self:center;">Use the green <b>Process Order &gt;&gt;&gt;</b> button at the top of the cart to submit.</span>
+          </div>
+        </div>
+
+        <!-- ============ SCREEN 10: CONFIRMATION ============ -->
+        <div class="screen" id="screen-10">
+          <div class="status-banner-green">Your order has been successfully submitted. Please click the 'Orders' button above to start a new order</div>
+          <div class="band">Customer Information</div>
+          <div id="confCustomer" class="conf-grid"></div>
+          <div class="band">Services Ordered<br><span style="font-weight:normal; font-size:11px;">⊜ AT&amp;T</span></div>
+          <div id="confOrderHead" class="conf-grid"></div>
+          <div class="notice-yellow" id="mobilityNotice">Mobility order is not yet complete. The customer must check their email and read and sign the Terms and Conditions.</div>
+          <div id="confLines"></div>
+        </div>
+
+      </div><!-- /content -->
+    </div><!-- /main-frame -->
+  </div><!-- /main-col -->
+
+  <!-- ============ CART ============ -->
+  <div class="cart-col" id="cartCol">
+    <div class="cart-action" id="cartAction"></div>
+    <div class="cart">
+      <div class="c-band oid">Order ID: &nbsp;<span>DSI215736254</span></div>
+      <div class="c-band">Shopping Cart</div>
+      <div id="cartBody"></div>
+    </div>
+  </div>
+</div><!-- /layout -->
+
+<!-- Services Available modal -->
+<div class="modal-overlay" id="svcModal" style="display:none;">
+  <div class="svc-modal">
+    <div class="svc-title"><span class="globe" style="display:inline-block;width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 35% 35%, #bfe3ff, #57a8e8 60%, #2a6db3);"></span>Services Available<span class="svc-x" id="svcClose" title="Close">✕</span></div>
+    <div class="svc-inner">
+      <div class="svc-addr" id="svcAddrBox"></div>
+      <div class="svc-band">⊜ AT&amp;T Wireless</div>
+      <div class="svc-row">All AT&amp;T Wireless packages are available</div>
+      <div class="svc-row">📱 📋</div>
+      <div style="height:10px;"></div>
+      <div class="svc-band">⊜ AT&amp;T Internet</div>
+      <table class="svc-table">
+        <tr><th>Offer Name</th><th>Description</th><th class="pr">Full Price</th><th class="pr">Promo Price</th></tr>
+        <tr><td>AT&amp;T Internet for Business - Business Fiber 5000s</td><td>5 Gig up/down</td><td class="pr">$285.00</td><td class="pr">$285.00*</td></tr>
+        <tr><td>AT&amp;T Internet for Business - Business Fiber 2000s</td><td>2 Gig up/down</td><td class="pr">$185.00</td><td class="pr">$185.00*</td></tr>
+        <tr><td>AT&amp;T Internet for Business - Business Fiber 1000s</td><td>1 Gig up/down</td><td class="pr">$120.00</td><td class="pr">$120.00*</td></tr>
+        <tr><td>AT&amp;T Internet for Business - Business Fiber 500s</td><td>500 Mbps up/down</td><td class="pr">$90.00</td><td class="pr">$90.00*</td></tr>
+        <tr><td>AT&amp;T Internet for Business - Business Fiber 300s</td><td>300 Mbps up/down</td><td class="pr">$60.00</td><td class="pr">$60.00*</td></tr>
+      </table>
+      <div class="svc-foot">* Price after $10/mo. AutoPay and paperless billing discount (within 2 bills)</div>
+      <div style="height:10px;"></div>
+      <div class="svc-band voice">⊜ AT&amp;T Voice</div>
+      <div class="svc-row">AT&amp;T Voice packages are available</div>
+    </div>
+  </div>
+</div>
+
+<div class="timer-chip"><span class="dot"></span><span id="timer">0:00</span></div>
+<div class="chat-bubble">💬</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* =====================================================================
+     TRAINING COACH MESSAGES — EDIT THE WORDING HERE.
+     Each message pops up in red the FIRST time the rep reaches that step
+     in an order (they reset when a new order is started via "Orders").
+     Delete a line to turn that tip off entirely.
+     ===================================================================== */
+  var COACH = {
+    secure1:   'The Secure Data link is OPTIONAL on this page — you are collecting this basic info over the phone. Every later page requires it.',
+    campaign:  'You must select the "SBS Onyx Fiber (BR3)" campaign to continue with this order.',
+    ein:       'EIN must be 9 digits in the format 00-0000000 (ex: 91-1259456). It will format automatically as you type.',
+    bizname:   'Extremely important this matches the EXACT registered business name, Including "LLC" at the end.',
+    svcAvail:  'Click here to see if Business Fiber is available for this customer.',
+    verifySource: 'Follow these links to confirm their business is active. If a flag happens, it\'s important that this step was followed.',
+    secure4:   'Click here, the customer will receive a link with verification pin, you\'ll enter it here to continue.',
+    idauth:    'Send the ID Authentication link — the customer must receive and complete it on their phone or email before you can continue. They will receive a link to scan their ID or Passport.',
+    agreement: 'Click "Refresh Secure Data collection" until the agreement status shows Completed. The customer signs on their end.',
+    payplan:   'Always select "AT&amp;T Installment Plan".',
+    addport:   'Now click Add Port, then Configure to select all promotions.',
+    imei:      'Make sure you have these numbers saved somewhere else in case you need them again.',
+    promos:    'Review BOTH promotions with the customer and check each "I understand" box before clicking Close.',
+    payment:   'Click "Refresh Secure Data collection" and wait for the customer to finish on their end before processing the order.',
+    tnc:       'Final step, Customer must go to email to sign "Terms and Conditions". Your order is not complete until this step is done.'
+  };
+
+  /* ================= STATE ================= */
+  var DEFAULT_PHONES = ['', '858-868-1660', '949-842-1207', '951-551-7070'];
+  var BYOD_DEVICES   = ['Apple iPhone 16 Plus', 'Apple iPhone 16 Plus', 'Apple iPhone 15 A2846', 'Apple iPhone 15 A2846'];
+  var SHIP_DEVICE_GROUPS = {
+    'Apple': [
+      'iPhone 17 Pro Max 2TB - Offer Available',
+      'iPhone 17 Pro Max 1TB - Offer Available',
+      'iPhone 17 Pro Max 512GB - Offer Available',
+      'iPhone 17 Pro Max 256GB - Offer Available',
+      'iPhone 17 Pro 1TB - Offer Available',
+      'iPhone 17 Pro 512GB - Offer Available',
+      'iPhone 17 Pro 256GB - Offer Available',
+      'iPhone 17 512GB - Offer Available',
+      'iPhone 17 256GB - Offer Available'
+    ],
+    'Samsung': [
+      'Galaxy A37 5G - Offer Available',
+      'Galaxy S26 Ultra (1TB) - Offer Available',
+      'Galaxy S26 Ultra (512GB) - Offer Available',
+      'Galaxy S26 Ultra (256GB) - Offer Available',
+      'Galaxy S26+ (512GB) - Offer Available',
+      'Galaxy S26+ (256GB) - Offer Available',
+      'Galaxy S26 (512GB) - Offer Available',
+      'Galaxy S26 (256GB) - Offer Available',
+      'Samsung Galaxy A17 5G - Offer Available',
+      'Galaxy S25 FE (128GB) - Offer Available',
+      'Galaxy Z Fold7 (512GB) - Offer Available',
+      'Galaxy Z Fold7 (256GB) - Offer Available',
+      'Galaxy Z Fold6 (512GB)',
+      'Galaxy Z Fold6 (256GB)',
+      'Galaxy Z Flip7 (512GB) - Offer Available',
+      'Galaxy Z Flip7 (256GB) - Offer Available',
+      'Galaxy XCover7 Pro - Offer Available'
+    ]
+  };
+  var SHIP_DEVICES = SHIP_DEVICE_GROUPS['Apple'].concat(SHIP_DEVICE_GROUPS['Samsung']);
+  var SHIP_DATA_PLANS = ['AT&T Bus Unl Prem 2.0 w/ Turbo for Bus', 'AT&T Business Unlimited Premium 3.0', 'AT&T Business Unlimited Advanced 3.0', 'AT&T Business Unlimited Standard 3.0'];
+  var SHIP_PAY_PLANS = ['Equipment Installment Plan 36', 'Equipment Installment Plan 30', 'Equipment Installment Plan 24', 'AT&T Installment Plan with Next Up Anytime', 'AT&T Installment Plan', 'Full Retail Price'];
+  function lineTotal(l) { return l.deviceType === 'shipped' ? 109.81 : 50; }
+
+  var state = {
+    screen: 1,
+    custName: 'SONNY HOGUE',
+    custPhone: '',
+    custEmail: '',
+    custAddr: '27537 COMMERCE CENTER DR',
+    custUnit: '204',
+    custCity: 'TEMECULA',
+    custState: 'CA',
+    custZip: '92590-2532',
+    secureLink1: false,
+    secure4: false,
+    secure9: false,
+    agreementDone: false,
+    idLinkSent: false,
+    lines: []
+  };
+
+  function newLine() {
+    var i = state.lines.length;
+    return {
+      stage: 'device',          // device | imei | shipselect | config | complete
+      deviceType: null,         // 'byod' | 'shipped'
+      deviceName: '',
+      imei: '', imeiConfirm: '', imeiErr: false,
+      plan: '',
+      payPlan: '',
+      port: 'yes',
+      portVerified: false,
+      portPhone: (i === 0 ? state.custPhone : DEFAULT_PHONES[i]) || '',
+      pf: { carrier: '', acctName: '', acct: '', pin: '', address: '', city: '', state: '', zip: '' },
+      portAdded: false,
+      promoOpen: false,
+      promo1: false, promo2: false, promo3: false,
+      tradeAccepted: null, tradeDevice: '', tradeValue: '',
+      promoDone: false,
+      showInfo: false
+    };
+  }
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function completedLines() { return state.lines.filter(function (l) { return l.stage === 'complete'; }); }
+
+  /* ================= COACH TIPS ================= */
+  var coachShown = {};
+  var coachTimer = null;
+  var mobilityTimer = null;
+  function hideCoach() {
+    var t = document.querySelector('.coach-tip');
+    if (t) t.remove();
+    if (coachTimer) { clearTimeout(coachTimer); coachTimer = null; }
+  }
+  function showCoach(key, anchor) {
+    if (!COACH[key] || coachShown[key] || !anchor) return;
+    coachShown[key] = true;
+    hideCoach();
+    var tip = document.createElement('div');
+    tip.className = 'coach-tip';
+    tip.innerHTML = '<span class="ct-x" title="Dismiss">✕</span><span class="ct-label">⚠ IMPORTANT STEP</span><div>' + COACH[key] + '</div>';
+    document.body.appendChild(tip);
+    var r = anchor.getBoundingClientRect();
+    var left = window.scrollX + r.left;
+    if (left + 310 > window.scrollX + document.documentElement.clientWidth) {
+      left = window.scrollX + document.documentElement.clientWidth - 315;
+    }
+    tip.style.left = Math.max(8, left) + 'px';
+    tip.style.top = (window.scrollY + r.bottom + 10) + 'px';
+    tip.querySelector('.ct-x').addEventListener('click', hideCoach);
+    coachTimer = setTimeout(hideCoach, 12000);
+  }
+
+  /* ================= CHROME (per-screen frame config) ================= */
+  var CHROME = {
+    1:  { att: false, tabs: false, stepper: null, cart: false, credit: false, action: null },
+    2:  { att: true,  tabs: true,  stepper: { mid: 'Business Verification', active: 0 }, cart: true, credit: false, action: null },
+    3:  { att: true,  tabs: true,  stepper: { mid: 'Business Verification', active: 1 }, cart: true, credit: false, action: null },
+    4:  { att: true,  tabs: true,  stepper: { mid: 'Credit Check',          active: 1 }, cart: true, credit: false, action: null },
+    5:  { att: true,  tabs: true,  stepper: { mid: 'ID Authentication',     active: 1 }, cart: true, credit: false, action: null },
+    6:  { att: true,  tabs: true,  stepper: { mid: 'Business Agreement',    active: 1 }, cart: true, credit: true,  action: null },
+    7:  { att: true,  tabs: true,  stepper: { mid: 'Business Agreement',    active: 2 }, cart: true, credit: true,  action: null },
+    8:  { att: true,  tabs: true,  stepper: { mid: 'Business Agreement',    active: 3 }, cart: true, credit: true,  action: 'finalize' },
+    9:  { att: true,  tabs: false, stepper: null, cart: true, credit: true, action: 'process' },
+    10: { att: true,  tabs: false, stepper: null, cart: true, credit: true, action: null }
+  };
+
+  function goTo(n) {
+    state.screen = n;
+    var c = CHROME[n];
+
+    document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('visible'); });
+    $('screen-' + n).classList.add('visible');
+
+    $('attBand').style.display = c.att ? '' : 'none';
+    $('svcTabs').style.display = c.tabs ? '' : 'none';
+    $('stepper').style.display = c.stepper ? '' : 'none';
+    $('cartCol').style.display = c.cart ? '' : 'none';
+    $('creditSummary').style.display = c.credit ? '' : 'none';
+
+    if (c.stepper) {
+      $('step1').textContent = c.stepper.mid;
+      for (var i = 0; i < 4; i++) {
+        var st = $('step' + i);
+        st.className = 'step' + (i < c.stepper.active ? ' done' : i === c.stepper.active ? ' active' : '');
+      }
+    }
+
+    /* header is blank on page 1; later pages show the customer entered there */
+    $('hdrName').textContent = (n === 1) ? '' : state.custName;
+    $('hdrPhone').textContent = (n === 1) ? '' : state.custPhone;
+
+    var act = $('cartAction');
+    if (c.action === 'finalize') {
+      act.innerHTML = '<button class="btn-green" id="btnFinalize" style="width:100%;">Finalize &nbsp;&gt;&gt;&gt;</button>';
+      $('btnFinalize').addEventListener('click', function () { goTo(9); });
+    } else if (c.action === 'process') {
+      act.innerHTML = '<button class="btn-green" id="btnProcess" style="width:100%;">Process Order &nbsp;&gt;&gt;&gt;</button>';
+      $('btnProcess').addEventListener('click', function () {
+        if (!state.secure9) { $('gateHint9').style.display = ''; return; }
+        renderConfirmation(); goTo(10);
+      });
+    } else {
+      act.innerHTML = '';
+    }
+
+    if (n === 4) {
+      $('ccPhone').value = state.custPhone;
+      $('ccEmail').value = state.custEmail;
+    }
+    if (n === 5) {
+      $('idaMob').value = state.custPhone;
+      $('idaEmail').value = state.custEmail;
+    }
+    if (n === 7) renderLines();
+    if (n === 8) renderSummary();
+    renderCart();
+    resetCountdown();
+    window.scrollTo(0, 0);
+
+    /* screen-entry coach tips */
+    hideCoach();
+    if (n === 1) showCoach('secure1', $('secureLink1'));
+    if (n === 5) showCoach('idauth', $('btnSendIdAuth'));
+    if (n === 6) showCoach('agreement', $('secureLink6'));
+    if (n === 9) showCoach('payment', $('secureLink9'));
+
+    /* confirmation: T&Cs auto-sign after 8 seconds, yellow notice flips green */
+    if (mobilityTimer) { clearTimeout(mobilityTimer); mobilityTimer = null; }
+    if (n === 10) {
+      showCoach('tnc', $('mobilityNotice'));
+      mobilityTimer = setTimeout(function () {
+        var el = $('mobilityNotice');
+        el.className = 'notice-complete';
+        el.textContent = 'Mobility order is complete';
+      }, 8000);
+    }
+  }
+
+  /* ================= CART ================= */
+  function cartLineBlock(l, idx) {
+    var h = '';
+    h += '<div class="c-band line">Line ' + (idx + 1) + (idx === 0 ? ' (primary)' : '') + '</div>';
+    h += '<div class="c-item"><span>' + esc(l.deviceName) + '<br>(' + (l.deviceType === 'byod' ? 'BYOD' : 'AT&amp;T Shipped') + ')</span><span></span></div>';
+    if (l.deviceType === 'shipped') {
+      h += '<div class="c-item"><span>Installment Plan Charge</span><span class="price" style="color:#c00;">$30.56</span></div>';
+      h += '<div class="c-note">0% APR, 36 monthly installments</div>';
+      h += '<div class="c-item"><span>' + esc(l.plan || 'Data Plan') + '</span><span class="price" style="color:#c00;">$80.00</span></div>';
+      h += '<div class="c-item"><span>AutoPay/Paperless Discount</span><span class="price discount">($5.00)</span></div>';
+      h += '<div class="c-note">$10/mo AutoPay and Paperless Billing discount with bank account or AT&amp;T Points Plus Card from Citi. Reduced to $5/mo with debit card and no discount with credit card. If you decline AutoPay and Paperless Billing your price will increase.</div>';
+      h += '<div class="c-item"><span>AT&amp;T Business Fees</span><span class="price" style="color:#c00;">$4.25</span></div>';
+      h += '<div class="c-note">Administrative Fee &nbsp;$2.49<br>Regulatory Cost Recovery Fee &nbsp;$1.50<br>Property Tax Allotment Fee &nbsp;$0.26</div>';
+    } else {
+      h += '<div class="c-item"><span>' + esc(l.plan || 'Data Plan') + '</span><span class="price" style="color:#c00;">$50.00</span></div>';
+      h += '<div class="c-item"><span>AutoPay/Paperless Discount</span><span class="price discount">($5.00)</span></div>';
+      h += '<div class="c-note">$10/mo AutoPay and Paperless Billing discount with bank account. Reduced to $5/mo with debit card and no discount with credit card. If you decline AutoPay and Paperless Billing your price will increase.</div>';
+      h += '<div class="c-item"><span>BYOD AT&amp;T Visa Card Switcher</span><span class="price">$0.00</span></div>';
+      h += '<div class="c-note">Get up to an $800 AT&amp;T Visa Reward Card (One offer per CTN with a max of 10 eligible offers per Wireless BAN (no exceptions))</div>';
+      h += '<div class="c-item"><span>BYOD SBS Switcher Offer</span><span class="price discount">($25.00)</span></div>';
+      h += '<div class="c-note">$25.00 credit for 24 months</div>';
+    }
+    return h;
+  }
+
+  function renderCart() {
+    var done = completedLines();
+    var total = 0;
+    done.forEach(function (l) { total += lineTotal(l); });
+    var h = '';
+
+    if (done.length > 0) {
+      h += '<div class="c-band">First Bill Charges</div>';
+      h += '<div class="c-item"><span>Waived Activation Fee (' + done.length + ')</span><span class="price">$0.00</span></div>';
+      h += '<div class="c-note" style="text-decoration:underline;">Small Business Waived Activation Fee</div>';
+      h += '<div class="c-total"><span class="tl">First Bill Total: <span style="font-size:8px;">(plus monthly)</span></span><span class="price">$0.00</span></div>';
+    }
+
+    h += '<div class="c-band">Monthly Charges</div>';
+    h += '<div class="c-band dark">Mobile Charges</div>';
+    done.forEach(function (l, i) { h += cartLineBlock(l, i); });
+
+    h += '<div class="c-total"><span class="tl">Wireless Total:</span><span class="price">$' + total.toFixed(2) + '</span></div>';
+    h += '<div class="c-total grand"><span>Monthly Total*:</span><span style="color:#111;">$' + total.toFixed(2) + '</span></div>';
+    h += '<div class="c-foot">* Not including taxes and surcharges. Price higher after discount(s) removed or promo(s) end.</div>';
+
+    $('cartBody').innerHTML = h;
+  }
+
+  /* ================= BUILD ORDER ================= */
+  /* both flows: acct name/address autofill on Verify, so only Acct + PIN gate Add Port */
+  function shipPortReady(l) {
+    return l.pf.acct.trim() !== '' && l.pf.pin.trim() !== '';
+  }
+
+  function lineHTML(l, i) {
+    var h = '<div class="line-card" data-line="' + i + '">';
+    h += '<div class="line-head"><span class="gear">⚙</span><span class="title">Line ' + (i + 1) + (i === 0 ? ' (primary)' : '') + '</span><span class="x" data-action="removeLine" data-line="' + i + '" title="Remove line">✕</span></div>';
+    h += '<div class="line-body">';
+
+    if (l.stage === 'device') {
+      h += '<div class="dev-btns">'
+        + '<button class="pill" data-action="pickShipped" data-line="' + i + '">AT&amp;T Shipped Device</button>'
+        + '<button class="pill" data-action="pickByod" data-line="' + i + '">Customer Device</button>'
+        + '</div>';
+
+    } else if (l.stage === 'imei') {
+      h += '<div class="dev-btns">'
+        + '<button class="pill" data-action="pickShipped" data-line="' + i + '">AT&amp;T Shipped Device</button>'
+        + '<button class="pill selected" data-action="pickByod" data-line="' + i + '">Customer Device</button>'
+        + '</div>';
+      h += '<div class="center"><b>Customer Device Details:</b> <span class="note-purple">pending validation</span></div>';
+      h += '<div class="row" style="justify-content:center; gap:14px; margin-top:8px;">'
+        + '<span><label>IMEI: </label><input type="text" data-field="imei" data-line="' + i + '" value="' + esc(l.imei) + '" style="width:150px;"></span>'
+        + '<span><label>Confirm: </label><input type="text" data-field="imeiConfirm" data-line="' + i + '" value="' + esc(l.imeiConfirm) + '" style="width:150px;"></span>'
+        + '<button class="pill" data-action="validateImei" data-line="' + i + '">Validate</button>'
+        + '</div>';
+      h += '<div class="center note-blue">This device will be validated for eSIM activation.</div>';
+      if (l.imeiErr) {
+        h += '<div class="center" style="color:#c00; font-weight:bold; margin-top:4px;">IMEI and Confirm must match — enter the same number in both fields.</div>';
+      }
+
+    } else if (l.stage === 'shipconfig') {
+      h += '<div class="dev-btns">'
+        + '<button class="pill selected" data-action="pickShipped" data-line="' + i + '">AT&amp;T Shipped Device</button>'
+        + '<button class="pill" data-action="pickByod" data-line="' + i + '">Customer Device</button>'
+        + '</div>';
+
+      h += '<div class="charges-box"><h4>Device Charges Summary</h4>'
+        + '<div class="cb-row"><span>Device Total:</span><span class="v">$1,099.99</span></div>'
+        + '<div class="cb-row"><span>Req\'d Down Pmnt:</span><span class="v">$0.00</span></div>'
+        + '<div class="cb-row"><span>Opt\'l Down Pmnt:</span><span class="v">$ <input type="text" style="width:36px;"> .00</span></div>'
+        + '<div class="cb-row"><span>Monthly Total:</span><span class="v">' + ((l.payPlan && l.payPlan !== 'Full Retail Price') ? '$30.56' : '$0.00') + '</span></div>'
+        + '<div style="font-style:italic; font-size:10px; color:#2b3fd4; margin-top:4px;">* In-Stock devices typically ship within 1-3 days.</div>'
+        + '<div class="center" style="margin-top:6px;"><a href="javascript:void(0)"><b>Broadband Facts Label</b></a><br>'
+        + '<input type="text" value="' + esc(state.custEmail) + '" style="width:165px; margin-top:3px;"><br>'
+        + '<button class="pill" style="margin-top:4px;" type="button">Email Label</button></div>'
+        + '</div>';
+
+      h += '<div class="row"><span class="instock"><input type="checkbox" checked> In-Stock</span>'
+        + '<select style="width:130px;"><option>Filter manufacturer</option><option>Apple</option><option>Samsung</option></select>'
+        + '<select style="width:100px;"><option>Filter type</option><option>Smartphone</option><option>Tablet</option></select>'
+        + '<button class="pill" type="button">Clear</button></div>';
+
+      h += '<div class="row"><label>Device: </label>'
+        + '<select data-field="shipDevice" data-line="' + i + '" style="width:300px;">'
+        + Object.keys(SHIP_DEVICE_GROUPS).map(function (brand) {
+            return '<optgroup label="' + brand + '">'
+              + SHIP_DEVICE_GROUPS[brand].map(function (p) { return '<option' + (p === l.deviceName ? ' selected' : '') + '>' + p + '</option>'; }).join('')
+              + '</optgroup>';
+          }).join('')
+        + '</select></div>';
+      h += '<div class="row"><label>Data Plan: </label>'
+        + '<select data-field="plan" data-line="' + i + '" style="width:300px;">'
+        + '<option value=""' + (l.plan ? '' : ' selected') + '>Select a Data Plan</option>'
+        + SHIP_DATA_PLANS.map(function (p) { return '<option' + (p === l.plan ? ' selected' : '') + '>' + p + '</option>'; }).join('')
+        + '</select></div>';
+      h += '<div class="row"><label>Pay Plan: </label>'
+        + '<select data-field="payPlan" data-line="' + i + '" style="width:300px;">'
+        + '<option value=""' + (l.payPlan ? '' : ' selected') + '>Select a Pay Plan</option>'
+        + SHIP_PAY_PLANS.map(function (p) { return '<option' + (p === l.payPlan ? ' selected' : '') + '>' + p + '</option>'; }).join('')
+        + '</select></div>';
+
+      h += '<div class="row"><label>Port: </label>'
+        + '<label><input type="radio" name="port' + i + '" data-field="portYes" data-line="' + i + '"' + (l.port === 'yes' ? ' checked' : '') + '> Yes</label>'
+        + '<label><input type="radio" name="port' + i + '" data-field="portNo" data-line="' + i + '"' + (l.port === 'no' ? ' checked' : '') + '> No</label>';
+      if (l.port === 'yes') {
+        if (!l.portVerified) {
+          h += '<input type="text" data-field="portPhone" data-line="' + i + '" value="' + esc(l.portPhone) + '" style="width:110px;">'
+            + ' <button class="pill" data-action="verifyPort" data-line="' + i + '" id="btnVerify' + i + '"' + (l.portPhone.trim() ? '' : ' disabled') + '>Verify</button>';
+        } else if (!l.portAdded) {
+          h += '<input type="text" data-field="portPhone" data-line="' + i + '" value="' + esc(l.portPhone) + '" disabled style="width:110px;">'
+            + ' <button class="pill" data-action="addPort" data-line="' + i + '" id="btnAddPort' + i + '"' + (shipPortReady(l) ? '' : ' disabled') + '>Add Port</button>';
+        } else {
+          h += '<input type="text" value="' + esc(l.portPhone) + '" disabled style="width:110px;"> <span class="check">✔</span> '
+            + '<a href="javascript:void(0)" class="show-info" data-action="toggleInfo" data-line="' + i + '">Show Info</a>';
+        }
+      }
+      h += '</div>';
+
+      if (l.port === 'yes' && l.portVerified && !l.portAdded) {
+        h += '<div class="port-box">'
+          + '<div class="row"><label>Carrier:</label><span></span><label style="margin-left:60px;">Support Phone:</label><span></span></div>'
+          + '<div class="port-grid">'
+          + '<label>Acct Name:</label><span><input type="text" data-field="pf.acctName" data-line="' + i + '" value="' + esc(l.pf.acctName) + '" style="width:130px;"> &nbsp;<b>Acct:</b> <input type="text" data-field="pf.acct" data-line="' + i + '" value="' + esc(l.pf.acct) + '" style="width:115px;"></span>'
+          + '<label>Pin:</label><span><input type="text" data-field="pf.pin" data-line="' + i + '" value="' + esc(l.pf.pin) + '" style="width:65px;"></span>'
+          + '<label>Address:</label><span><input type="text" data-field="pf.address" data-line="' + i + '" value="' + esc(l.pf.address) + '" style="width:300px;"></span>'
+          + '<label>City:</label><span><input type="text" data-field="pf.city" data-line="' + i + '" value="' + esc(l.pf.city) + '" style="width:120px;"> &nbsp;<b>State:</b> <input type="text" data-field="pf.state" data-line="' + i + '" value="' + esc(l.pf.state) + '" style="width:36px;"> &nbsp;<b>Zip:</b> <input type="text" data-field="pf.zip" data-line="' + i + '" value="' + esc(l.pf.zip) + '" style="width:80px;"></span>'
+          + '</div>'
+          + '<div class="note-blue" style="margin-top:5px;">Enter the account number and PIN from the customer\'s current carrier (any numbers are fine for training).</div>'
+          + '</div>';
+      }
+
+      if (l.portAdded && l.showInfo) {
+        h += '<div class="port-box" style="background:#f0f6fb;">'
+          + '<div class="row"><label>Acct Name: </label>' + esc(l.pf.acctName) + ' &nbsp;<label>Acct: </label>•••••••••••• &nbsp;<label>Pin: </label>••••••</div>'
+          + '<div class="row"><label>Address: </label>' + esc(l.pf.address) + ', ' + esc(l.pf.city) + ' ' + esc(l.pf.state) + ' ' + esc(l.pf.zip) + '</div>'
+          + '</div>';
+      }
+
+      if ((l.port === 'no') || l.portAdded) {
+        h += '<div class="row" style="clear:both;"><label>Promotions: </label>'
+          + (l.promoDone ? '<span class="green">Completed</span>' : '<span class="orange">Pending</span>')
+          + '<button class="pill" data-action="togglePromo" data-line="' + i + '" style="margin-left:auto;">' + (l.promoOpen ? 'Hide' : 'Configure') + '</button></div>';
+        if (l.promoOpen) h += promoPanelHTML(l, i);
+      }
+
+    } else if (l.stage === 'config' || l.stage === 'complete') {
+      var collapsed = (l.stage === 'complete');
+      var devLabel = l.deviceType === 'byod' ? 'Bring Your Own Device Details:' : 'AT&amp;T Shipped Device Details:';
+
+      if (!collapsed && l.deviceType) {
+        h += '<div class="dev-btns">'
+          + '<button class="pill' + (l.deviceType === 'shipped' ? ' selected' : '') + '" data-action="pickShipped" data-line="' + i + '">AT&amp;T Shipped Device</button>'
+          + '<button class="pill' + (l.deviceType === 'byod' ? ' selected' : '') + '" data-action="pickByod" data-line="' + i + '">Customer Device</button>'
+          + '</div>';
+      }
+      h += '<div class="center"><b>' + devLabel + '</b> <span class="note-purple" style="font-weight:bold;">' + esc(l.deviceName) + '</span> <span class="check">✔</span></div>';
+      h += '<div class="center note-blue" style="margin-bottom:6px;">Device has been validated and will use eSIM activation.</div>';
+
+      if (!collapsed) {
+        h += '<div class="charges-box"><h4>Device Charges Summary</h4>'
+          + '<div class="cb-row"><span>Device Total:</span><span class="v">$0.00</span></div>'
+          + '<div class="cb-row"><span>Req\'d Down Pmnt:</span><span></span></div>'
+          + '<div class="cb-row"><span>Opt\'l Down Pmnt:</span><span class="v">$ <input type="text" style="width:36px;"> .00</span></div>'
+          + '<div class="cb-row"><span>Monthly Total:</span><span></span></div>'
+          + '<div class="center" style="margin-top:6px;"><a href="javascript:void(0)"><b>Broadband Facts Label</b></a><br>'
+          + '<input type="text" value="' + esc(state.custEmail) + '" style="width:165px; margin-top:3px;"><br>'
+          + '<button class="pill" style="margin-top:4px;" type="button">Email Label</button></div>'
+          + '</div>';
+      }
+
+      if (collapsed) {
+        h += '<div class="row"><label>Data Plan: </label><select disabled style="width:280px;"><option>' + esc(l.plan || 'Select a Data Plan') + '</option></select></div>';
+        if (l.deviceType === 'shipped') {
+          h += '<div class="row"><label>Pay Plan: </label><select disabled style="width:280px;"><option>' + esc(l.payPlan || 'Select a Pay Plan') + '</option></select></div>';
+        }
+      } else {
+        h += '<div class="row"><label>Data Plan: </label>'
+          + '<select data-field="plan" data-line="' + i + '" style="width:300px;">'
+          + '<option value=""' + (l.plan ? '' : ' selected') + '>Select a Data Plan</option>'
+          + SHIP_DATA_PLANS.map(function (p) {
+              return '<option' + (p === l.plan ? ' selected' : '') + '>' + p + '</option>';
+            }).join('')
+          + '</select></div>';
+      }
+
+      if (collapsed) {
+        h += '<div class="row"><label>Port: </label>'
+          + '<label><input type="radio" disabled' + (l.port === 'yes' ? ' checked' : '') + '> Yes</label>'
+          + '<label><input type="radio" disabled' + (l.port === 'no' ? ' checked' : '') + '> No</label>';
+        if (l.port === 'yes') {
+          h += '<input type="text" value="' + esc(l.portPhone) + '" disabled style="width:110px;"> <span class="check">✔</span> '
+            + '<a href="javascript:void(0)" class="show-info" data-action="toggleInfo" data-line="' + i + '">Show Info</a>';
+        }
+        h += '</div>';
+        if (l.port === 'yes' && l.showInfo) {
+          h += '<div class="port-box" style="background:#f0f6fb;">'
+            + '<div class="row"><label>Acct Name: </label>' + esc(l.pf.acctName) + ' &nbsp;<label>Acct: </label>•••••••••••• &nbsp;<label>Pin: </label>••••••</div>'
+            + '<div class="row"><label>Address: </label>' + esc(l.pf.address) + ', ' + esc(l.pf.city) + ' ' + esc(l.pf.state) + ' ' + esc(l.pf.zip) + '</div>'
+            + '</div>';
+        }
+        h += '<div class="row"><label>Promotions: </label><span class="green">Completed</span>'
+          + '<button class="pill" data-action="togglePromo" data-line="' + i + '" style="margin-left:auto;">Configure</button></div>';
+        if (l.promoOpen) h += promoPanelHTML(l, i);
+
+      } else {
+        /* in-progress config — same port verification process as the shipped flow */
+        h += '<div class="row"><label>Port: </label>'
+          + '<label><input type="radio" name="port' + i + '" data-field="portYes" data-line="' + i + '"' + (l.port === 'yes' ? ' checked' : '') + '> Yes</label>'
+          + '<label><input type="radio" name="port' + i + '" data-field="portNo" data-line="' + i + '"' + (l.port === 'no' ? ' checked' : '') + '> No</label>';
+        if (l.port === 'yes') {
+          if (!l.portVerified) {
+            h += '<input type="text" data-field="portPhone" data-line="' + i + '" value="' + esc(l.portPhone) + '" style="width:110px;">'
+              + ' <button class="pill" data-action="verifyPort" data-line="' + i + '" id="btnVerify' + i + '"' + (l.portPhone.trim() ? '' : ' disabled') + '>Verify</button>';
+          } else if (!l.portAdded) {
+            h += '<input type="text" data-field="portPhone" data-line="' + i + '" value="' + esc(l.portPhone) + '" disabled style="width:110px;">'
+              + ' <button class="pill" data-action="addPort" data-line="' + i + '" id="btnAddPort' + i + '"' + (shipPortReady(l) ? '' : ' disabled') + '>Add Port</button>';
+          } else {
+            h += '<input type="text" value="' + esc(l.portPhone) + '" disabled style="width:110px;"> <span class="check">✔</span> '
+              + '<a href="javascript:void(0)" class="show-info" data-action="toggleInfo" data-line="' + i + '">Show Info</a>';
+          }
+        }
+        h += '</div>';
+
+        if (l.port === 'yes' && l.portVerified && !l.portAdded) {
+          h += '<div class="port-box">'
+            + '<div class="row"><label>Carrier:</label><span></span><label style="margin-left:60px;">Support Phone:</label><span></span></div>'
+            + '<div class="port-grid">'
+            + '<label>Acct Name:</label><span><input type="text" data-field="pf.acctName" data-line="' + i + '" value="' + esc(l.pf.acctName) + '" style="width:130px;"> &nbsp;<b>Acct:</b> <input type="text" data-field="pf.acct" data-line="' + i + '" value="' + esc(l.pf.acct) + '" style="width:115px;"></span>'
+            + '<label>Pin:</label><span><input type="text" data-field="pf.pin" data-line="' + i + '" value="' + esc(l.pf.pin) + '" style="width:65px;"></span>'
+            + '<label>Address:</label><span><input type="text" data-field="pf.address" data-line="' + i + '" value="' + esc(l.pf.address) + '" style="width:300px;"></span>'
+            + '<label>City:</label><span><input type="text" data-field="pf.city" data-line="' + i + '" value="' + esc(l.pf.city) + '" style="width:120px;"> &nbsp;<b>State:</b> <input type="text" data-field="pf.state" data-line="' + i + '" value="' + esc(l.pf.state) + '" style="width:36px;"> &nbsp;<b>Zip:</b> <input type="text" data-field="pf.zip" data-line="' + i + '" value="' + esc(l.pf.zip) + '" style="width:80px;"></span>'
+            + '</div>'
+            + '<div class="note-blue" style="margin-top:5px;">Enter the account number and PIN from the customer\'s current carrier (any numbers are fine for training).</div>'
+            + '</div>';
+        }
+
+        if (l.portAdded && l.showInfo) {
+          h += '<div class="port-box" style="background:#f0f6fb;">'
+            + '<div class="row"><label>Acct Name: </label>' + esc(l.pf.acctName) + ' &nbsp;<label>Acct: </label>•••••••••••• &nbsp;<label>Pin: </label>••••••</div>'
+            + '<div class="row"><label>Address: </label>' + esc(l.pf.address) + ', ' + esc(l.pf.city) + ' ' + esc(l.pf.state) + ' ' + esc(l.pf.zip) + '</div>'
+            + '</div>';
+        }
+
+        var promoUnlocked = (l.port === 'no') || l.portAdded;
+        if (promoUnlocked) {
+          h += '<div class="row" style="clear:both;"><label>Promotions: </label>'
+            + (l.promoDone ? '<span class="green">Completed</span>' : '<span class="orange">Pending</span>')
+            + '<button class="pill" data-action="togglePromo" data-line="' + i + '" style="margin-left:auto;">' + (l.promoOpen ? 'Hide' : 'Configure') + '</button></div>';
+          if (l.promoOpen) h += promoPanelHTML(l, i);
+        }
+      }
+    }
+
+    h += '<div style="clear:both;"></div></div></div>';
+    return h;
+  }
+
+  function promoPanelHTML(l, i) {
+    if (l.deviceType === 'shipped') return shippedPromoPanelHTML(l, i);
+    var bothChecked = l.promo1 && l.promo2;
+    var h = '<div class="promo-wrap">';
+    h += '<div class="band sub">Select your Promotion</div>';
+    h += '<div class="promo-disclosure">The promotions listed below are for review purposes only. The customer must meet all promotion requirements, and complete all required steps within the promotion timeline to qualify. This order will assume the customer qualifies for any promotion selected, however this is not a guarantee of promotion eligibility or a guarantee that discounts will apply.</div>';
+
+    h += '<div class="promo-card"><div class="p-band">BYOD AT&amp;T Visa Card Switcher</div>'
+      + '<div class="p-body">Get up to an $800 AT&amp;T Visa Reward card to help you switch to AT&amp;T'
+      + '<div class="p-chk"><label><input type="checkbox" data-field="promo1" data-line="' + i + '"' + (l.promo1 ? ' checked' : '') + '> I understand the terms, conditions and requirements of this promotion.</label></div>'
+      + '<div class="p-link"><span class="placeholder-text">[ PLACEHOLDER — link your approved promotion disclosure and terms here ]</span></div>'
+      + '</div></div>';
+
+    h += '<div class="promo-card"><div class="p-band">BYOD SBS Switcher Offer</div>'
+      + '<div class="p-body">Business customers: Get $600 per line in BYOD port-in credits when you port-in from a competitor and activate on a qualified AT&amp;T Unlimited Plan.'
+      + '<div class="p-chk"><label><input type="checkbox" data-field="promo2" data-line="' + i + '"' + (l.promo2 ? ' checked' : '') + '> I understand the terms, conditions and requirements of this promotion.</label></div>'
+      + '<div class="p-link"><span class="placeholder-text">[ PLACEHOLDER — link your approved promotion disclosure and terms here ]</span></div>'
+      + '</div></div>';
+
+    h += '<div class="center" style="margin:6px 0;">'
+      + '<button class="pill" data-action="closePromo" data-line="' + i + '" style="background:linear-gradient(#3c79c4,#234f92); color:#fff;"' + (bothChecked ? '' : ' disabled')
+      + (bothChecked ? '' : ' title="Check both promotion boxes first"') + '>Close</button>';
+    if (!bothChecked) h += '<div class="note-blue" style="margin-top:3px;">Check both "I understand…" boxes to enable Close.</div>';
+    h += '</div></div>';
+    return h;
+  }
+
+  function shippedPromoPanelHTML(l, i) {
+    var h = '<div class="promo-wrap">';
+    h += '<div class="band sub">Select your Promotion</div>';
+    h += '<div class="promo-disclosure">The promotions listed below are for review purposes only. The customer must meet all promotion requirements, and complete all required steps within the promotion timeline to qualify. This order will assume the customer qualifies for any promotion selected, however this is not a guarantee of promotion eligibility or a guarantee that discounts will apply.</div>';
+
+    var cards = [
+      { field: 'promo1', title: 'NDS SMB Wireless Port Line Offer', text: 'PRICING (CRU): Get up to $150 in Bill Credits when you bring your number and purchase a new smartphone on installment plan with qualifying unlimited plan.', checked: l.promo1 },
+      { field: 'promo2', title: 'AT&amp;T Visa Card Switcher', text: 'Get up to an $800 AT&amp;T Visa Reward card to help you switch to AT&amp;T', checked: l.promo2 },
+      { field: 'promo3', title: 'SMB Wireless Port Line Promotion Offer Advanced 3.0', text: 'Get $360 in Bill Credits when you add a new line and purchase a new smartphone on installment plan with qualifying unlimited plan.', checked: l.promo3 }
+    ];
+    cards.forEach(function (c) {
+      h += '<div class="promo-card"><div class="p-band">' + c.title + '</div>'
+        + '<div class="p-body">' + c.text
+        + '<div class="p-chk"><label><input type="checkbox" data-field="' + c.field + '" data-line="' + i + '"' + (c.checked ? ' checked' : '') + '> I understand the terms, conditions and requirements of this promotion.</label></div>'
+        + '<div class="p-link"><span class="placeholder-text">[ PLACEHOLDER — link your approved promotion disclosure and terms here ]</span></div>'
+        + '</div></div>';
+    });
+
+    /* trade-in promotion */
+    h += '<div class="promo-card"><div class="p-band" style="background:linear-gradient(#5a8ab8,#3c6e9e);">Business 3.0 Plan &amp; Existing - Apple Premium Device Trade-In</div>'
+      + '<div class="p-body">Up to $1,100 off Apple iPhone 17 Pro and 17 Pro Max or Up to $830 off iPhone 17 &amp; iPhone Air with eligible trade-in (installment &amp; unlimited plan)((2-3 TIER: Up to $1,100 off iPhone 17 Pro &amp; 17 Pro Max only with qualifying wireless plan (Extra 2.0 and above) and min. $230+ TIV; Up to $830 off all iPhone 17 Series &amp; iPhone Air with qualifying wireless plan (Extra 2.0 and above) and min. $130 TIV; Up to $350 off with min. $35-129 TIV))'
+      + '<div style="margin-top:8px;"><b>Disclosure</b><br><span style="font-size:10px;">This requires you to trade in your current device. If the trade in device meets minimum requirements your promotion will be added in 1-3 billing cycles</span></div>'
+      + '<div style="margin:10px 0 6px;">Would you like to add this promotion to your order?</div>'
+      + '<div><button class="pill" data-action="tradeAccept" data-line="' + i + '" style="background:linear-gradient(#8edc8e,#3faa44); color:#fff;' + (l.tradeAccepted === true ? ' box-shadow:0 0 0 2px #2a7a2e;' : '') + '">Accept</button> '
+      + '<button class="pill" data-action="tradeDecline" data-line="' + i + '"' + (l.tradeAccepted === false ? ' style="box-shadow:0 0 0 2px #888;"' : '') + '>Decline</button></div>';
+
+    if (l.tradeAccepted === true) {
+      h += '<div style="margin-top:10px;">A trade-in device is required for this promotion, select your trade-in device from the list of eligible trade-in devices below.</div>'
+        + '<div style="margin:6px 0;"><select data-field="tradeDevice" data-line="' + i + '" style="width:220px; border-radius:10px;">'
+        + '<option value=""' + (l.tradeDevice ? '' : ' selected') + '>--Select your trade-in device--</option>'
+        + ['iPhone 13', 'iPhone 14', 'iPhone 15', 'iPhone 16'].map(function (p) { return '<option' + (p === l.tradeDevice ? ' selected' : '') + '>' + p + '</option>'; }).join('')
+        + '</select></div>'
+        + '<div style="margin:6px 0;">Select the value of your trade in device from the values below</div>'
+        + '<div style="margin:6px 0;"><select data-field="tradeValue" data-line="' + i + '" style="width:220px; border-radius:10px;">'
+        + '<option value=""' + (l.tradeValue ? '' : ' selected') + '>--Select your trade-in value--</option>'
+        + ['$290+', '$130+', '$35+'].map(function (p) { return '<option' + (p === l.tradeValue ? ' selected' : '') + '>' + p + '</option>'; }).join('')
+        + '</select> ' + (l.tradeValue ? '<span class="check">✔</span>' : '<span style="color:#c00; font-weight:bold;">❗</span>') + '</div>';
+    } else if (l.tradeAccepted === false) {
+      h += '<div class="green" style="margin-top:8px;">Promotion declined — no trade-in required.</div>';
+    }
+
+    h += '<div class="p-link" style="margin-top:6px;"><span class="placeholder-text">[ PLACEHOLDER — link your approved promotion disclosure and terms here ]</span></div>'
+      + '</div></div>';
+
+    h += '<div class="center" style="margin:6px 0;">'
+      + '<button class="pill" data-action="closePromo" data-line="' + i + '" style="background:linear-gradient(#3c79c4,#234f92); color:#fff;"' + (l.promoDone ? '' : ' disabled') + '>Close</button>';
+    if (!l.promoDone) h += '<div class="note-blue" style="margin-top:3px;">Select a trade-in value (or Decline) to enable Close.</div>';
+    h += '</div></div>';
+    return h;
+  }
+
+  function renderLines() {
+    if (state.lines.length === 0) state.lines.push(newLine());
+    var h = '';
+    state.lines.forEach(function (l, i) { h += lineHTML(l, i); });
+    $('linesContainer').innerHTML = h;
+    var max = state.lines.length >= 4;
+    $('btnAddLine').disabled = max;
+    $('maxLineNote').style.display = max ? '' : 'none';
+  }
+
+  /* event delegation: clicks */
+  $('linesContainer').addEventListener('click', function (e) {
+    var t = e.target.closest('[data-action]');
+    if (!t) return;
+    var i = parseInt(t.getAttribute('data-line'), 10);
+    var l = state.lines[i];
+    var action = t.getAttribute('data-action');
+
+    if (action === 'removeLine') {
+      state.lines.splice(i, 1);
+      if (state.lines.length === 0) state.lines.push(newLine());
+    } else if (action === 'pickByod') {
+      if (l.stage !== 'complete') {
+        l.deviceType = 'byod'; l.stage = 'imei';
+        if (SHIP_DATA_PLANS.indexOf(l.plan) === -1) l.plan = '';
+      }
+    } else if (action === 'pickShipped') {
+      if (l.stage !== 'complete') {
+        l.deviceType = 'shipped'; l.stage = 'shipconfig';
+        if (SHIP_DEVICES.indexOf(l.deviceName) === -1) l.deviceName = SHIP_DEVICES[0];
+        if (SHIP_DATA_PLANS.indexOf(l.plan) === -1) l.plan = '';
+        l.promo1 = l.promo2 = l.promo3 = true;
+      }
+    } else if (action === 'validateImei') {
+      if (!l.imei.trim() || l.imei !== l.imeiConfirm) {
+        l.imeiErr = true;
+        renderLines();
+        return;
+      }
+      l.imeiErr = false;
+      l.deviceName = BYOD_DEVICES[i] || 'Apple iPhone 16 Plus';
+      l.stage = 'config';
+    } else if (action === 'verifyPort') {
+      if (!l.portPhone.trim()) return;
+      l.portVerified = true;
+      l.pf.acctName = state.custName;
+      l.pf.address = state.custAddr;
+      l.pf.city = state.custCity;
+      l.pf.state = state.custState;
+      l.pf.zip = state.custZip;
+    } else if (action === 'addPort') {
+      if (!shipPortReady(l)) return;
+      l.portAdded = true;
+    } else if (action === 'togglePromo') {
+      l.promoOpen = !l.promoOpen;
+    } else if (action === 'tradeAccept') {
+      l.tradeAccepted = true;
+      if (l.tradeValue) l.promoDone = true;
+    } else if (action === 'tradeDecline') {
+      l.tradeAccepted = false;
+      l.promoDone = true;
+    } else if (action === 'closePromo') {
+      if (l.deviceType === 'shipped') {
+        if (!l.promoDone) return;
+      } else {
+        if (!(l.promo1 && l.promo2)) return;
+        l.promoDone = true;
+      }
+      l.promoOpen = false;
+      l.stage = 'complete';
+    } else if (action === 'toggleInfo') {
+      l.showInfo = !l.showInfo;
+    } else {
+      return;
+    }
+    renderLines();
+    renderCart();
+    if (action === 'togglePromo' && l && l.promoOpen && !l.promoDone && l.deviceType !== 'shipped') {
+      showCoach('promos', $('linesContainer').querySelector('.promo-wrap .band'));
+    }
+  });
+
+  /* coach tips for build-order fields (delegated — inputs are re-rendered) */
+  $('linesContainer').addEventListener('focusin', function (e) {
+    var field = e.target.getAttribute && e.target.getAttribute('data-field');
+    if (!field) return;
+    if (field === 'imei' || field === 'imeiConfirm') showCoach('imei', e.target);
+    else if (field === 'payPlan') showCoach('payplan', e.target);
+  });
+
+  /* event delegation: text input (no re-render, just state + Add Port enable) */
+  $('linesContainer').addEventListener('input', function (e) {
+    var t = e.target;
+    var field = t.getAttribute('data-field');
+    if (!field) return;
+    var i = parseInt(t.getAttribute('data-line'), 10);
+    var l = state.lines[i];
+
+    if (field.indexOf('pf.') === 0) {
+      l.pf[field.slice(3)] = t.value;
+    } else if (field === 'imei') { l.imei = t.value; }
+    else if (field === 'imeiConfirm') { l.imeiConfirm = t.value; }
+    else if (field === 'portPhone') { l.portPhone = t.value; }
+    else if (field === 'plan') { l.plan = t.value; }
+
+    var vbtn = $('btnVerify' + i);
+    if (vbtn) vbtn.disabled = !l.portPhone.trim();
+    var btn = $('btnAddPort' + i);
+    if (btn) {
+      var ready = shipPortReady(l);
+      btn.disabled = !ready;
+      if (ready) showCoach('addport', btn);
+    }
+  });
+
+  /* delegation: radios & promo checkboxes (re-render ok on click-type changes) */
+  $('linesContainer').addEventListener('change', function (e) {
+    var t = e.target;
+    var field = t.getAttribute('data-field');
+    if (!field) return;
+    var i = parseInt(t.getAttribute('data-line'), 10);
+    var l = state.lines[i];
+
+    if (field === 'portYes') { l.port = 'yes'; renderLines(); }
+    else if (field === 'portNo') { l.port = 'no'; renderLines(); }
+    else if (field === 'promo1') { l.promo1 = t.checked; renderLines(); }
+    else if (field === 'promo2') { l.promo2 = t.checked; renderLines(); }
+    else if (field === 'promo3') { l.promo3 = t.checked; renderLines(); }
+    else if (field === 'tradeDevice') { l.tradeDevice = t.value; renderLines(); }
+    else if (field === 'tradeValue') {
+      l.tradeValue = t.value;
+      if (l.tradeAccepted === true && l.tradeValue) l.promoDone = true;
+      renderLines();
+      renderCart();
+    }
+    else if (field === 'plan') { l.plan = t.value; renderCart(); }
+    else if (field === 'payPlan') { l.payPlan = t.value; renderLines(); }
+    else if (field === 'shipDevice') { l.deviceName = t.value; }
+  });
+
+  $('btnAddLine').addEventListener('click', function () {
+    if (state.lines.length >= 4) return;
+    state.lines.push(newLine());
+    renderLines();
+  });
+
+  /* ================= SUMMARY / CONFIRMATION ================= */
+  function lineSummaryHTML(l, i, promoLabel) {
+    var h = '<div class="band sub" style="margin-top:6px;">Line ' + (i + 1) + (i === 0 ? ' (primary)' : '') + '</div>';
+    h += '<div class="sum-line-body">';
+    h += '<div>Number: <span>' + esc(l.port === 'yes' ? l.portPhone + ' (port)' : 'New number (assigned at activation)') + '</span></div>';
+    h += '<div>Device: <span>' + esc(l.deviceName) + ' (' + (l.deviceType === 'byod' ? 'BYOD' : 'Shipped') + ')</span></div>';
+    h += '<div>Data Plan: <span>' + esc(l.plan || '—') + '</span></div>';
+    if (l.deviceType === 'shipped') {
+      h += '<div>Pay Plan: <span>' + esc(l.payPlan || '—') + '</span></div>';
+      h += '<div>Ship Estimate: <span>InStock</span></div>';
+      h += '<div>' + promoLabel + ': <span>NDS SMB Wireless Port Line Offer</span></div>';
+      h += '<div>' + promoLabel + ': <span>AT&amp;T Visa Card Switcher</span></div>';
+      h += '<div>' + promoLabel + ': <span>SMB Wireless Port Line Promotion Offer Advanced 3.0</span></div>';
+      if (l.tradeAccepted === true && l.tradeValue) {
+        h += '<div>' + promoLabel + ': <span>Business 3.0 Plan &amp; Existing - Apple Premium Device Trade-In (' + esc(l.tradeDevice || 'trade-in') + ', ' + esc(l.tradeValue) + ')</span></div>';
+      }
+    } else {
+      h += '<div>' + promoLabel + ': <span>BYOD AT&amp;T Visa Card Switcher</span></div>';
+      h += '<div>' + promoLabel + ': <span>BYOD SBS Switcher Offer</span></div>';
+    }
+    h += '</div>';
+    return h;
+  }
+
+  function renderSummary() {
+    var done = completedLines();
+    $('summaryHead').innerHTML =
+      '<div class="cg">BAN: <span>287361926636</span></div>'
+      + '<div class="cg">Order #: <span>99-100000078009750</span></div>'
+      + '<div class="cg">Total Lines: <span>' + done.length + '</span></div>'
+      + '<div class="cg">Req\'d Down Payments: <span>$0.00</span></div>';
+    var h = '';
+    done.forEach(function (l, i) { h += lineSummaryHTML(l, i, 'Promotion'); });
+    if (done.length === 0) h = '<div class="panel center note-blue">No completed lines yet — go back to Build Order and complete at least one line.</div>';
+    $('summaryLines').innerHTML = h;
+  }
+
+  function renderConfirmation() {
+    $('confCustomer').innerHTML =
+      '<div class="cg">Name: <span>' + esc(state.custName) + '</span></div>'
+      + '<div class="cg">Address: <span>' + esc((state.custAddr + ' ' + state.custUnit).trim()) + '</span></div>'
+      + '<div class="cg">Primary Phone: <span>' + esc(state.custPhone) + '</span></div>'
+      + '<div class="cg">City, State &amp; Zip: <span>' + esc(state.custCity + ' ' + state.custState + ', ' + state.custZip) + '</span></div>'
+      + '<div class="cg">Email: <span>' + esc(state.custEmail) + '</span></div><div></div>';
+    var done = completedLines();
+    $('confOrderHead').innerHTML =
+      '<div class="cg">BAN: <span>287361926636</span></div>'
+      + '<div class="cg">Order #: <span>99-100000078009750</span></div>'
+      + '<div class="cg">Total Lines: <span>' + done.length + '</span></div>'
+      + '<div class="cg">Req\'d Down Payments: <span>$0.00</span></div>';
+    var h = '';
+    done.forEach(function (l, i) { h += lineSummaryHTML(l, i, 'Promotion Plan'); });
+    $('confLines').innerHTML = h;
+  }
+
+  /* ================= SCREEN-SPECIFIC WIRING ================= */
+
+  /* Screen 1 */
+  $('secureLink1').addEventListener('click', function () {
+    state.secureLink1 = true;
+    $('secureSent1').style.display = '';
+  });
+  $('inCampaign').addEventListener('focus', function () { showCoach('campaign', this); });
+  $('inEin').addEventListener('focus', function () { showCoach('ein', this); });
+  $('inBizName').addEventListener('focus', function () { showCoach('bizname', this); });
+  /* once an address is entered, point the rep at Service Availability */
+  $('inAddr').addEventListener('change', function () {
+    if (this.value.trim()) showCoach('svcAvail', $('btnSvcAvail'));
+  });
+  /* EIN auto-format: digits only, hyphen inserted after the 2nd digit */
+  $('inEin').addEventListener('input', function () {
+    var digits = this.value.replace(/\D/g, '').slice(0, 9);
+    this.value = digits.length > 2 ? digits.slice(0, 2) + '-' + digits.slice(2) : digits;
+  });
+  function s1Error(msg) {
+    var el = $('s1Err');
+    if (msg) { el.textContent = msg; el.style.display = ''; }
+    else { el.style.display = 'none'; }
+  }
+  $('btnSearchCustomer').addEventListener('click', function () {
+    if ($('inCampaign').value !== 'SBS Onyx Fiber (BR3)') {
+      s1Error('Campaign must be set to "SBS Onyx Fiber (BR3)" to continue.');
+      return;
+    }
+    if (!/^\d{2}-\d{7}$/.test($('inEin').value)) {
+      s1Error('EIN/Tax ID must be 9 digits in the format 00-0000000 (ex: 91-1259456).');
+      return;
+    }
+    s1Error(null);
+    var first = $('inFirst').value.trim();
+    var last = $('inLast').value.trim();
+    var phone = $('inPhone').value.trim();
+    var email = $('inEmail').value.trim();
+    if (first || last) state.custName = (first + ' ' + last).trim().toUpperCase();
+    if (phone) state.custPhone = phone;
+    if (email) state.custEmail = email;
+    var addr = $('inAddr').value.trim();
+    if (addr) {
+      state.custAddr = addr.toUpperCase();
+      state.custUnit = $('inUnit').value.trim().toUpperCase();
+      state.custCity = ($('inCity').value.trim() || 'CITY').toUpperCase();
+      state.custState = ($('inState').value.trim() || 'ST').toUpperCase();
+      state.custZip = $('inZip').value.trim() || '00000';
+    }
+    /* show the search-results grid; "Select" → "Build Sales Offer" advances */
+    $('rgAddr').textContent = addr ? addr.toUpperCase() : '';
+    $('rgPhone').textContent = phone;
+    var now = new Date();
+    $('rgDate').textContent = String(now.getMonth() + 1).padStart(2, '0') + '/'
+      + String(now.getDate()).padStart(2, '0') + '/' + String(now.getFullYear()).slice(2);
+    $('searchResults').style.display = '';
+  });
+
+  /* Services Available modal */
+  $('btnSvcAvail').addEventListener('click', function () {
+    var addr = $('inAddr').value.trim();
+    if (!addr) {
+      s1Error('Enter a Service Address before checking Service Availability.');
+      return;
+    }
+    s1Error(null);
+    var line2 = ($('inCity').value.trim() || 'CITY').toUpperCase() + ' , '
+      + ($('inState').value.trim() || 'ST').toUpperCase() + '  '
+      + ($('inZip').value.trim() || '00000');
+    $('svcAddrBox').innerHTML = esc(addr.toUpperCase()) + '<br>' + esc(line2);
+    $('svcModal').style.display = 'flex';
+  });
+  $('svcClose').addEventListener('click', function () { $('svcModal').style.display = 'none'; });
+  $('svcModal').addEventListener('click', function (e) { if (e.target === this) this.style.display = 'none'; });
+
+  /* Select customer → lock entered data, reveal Select Account + Build Sales Offer */
+  function lockCustomerData(lock) {
+    document.querySelectorAll('#screen-1 input, #screen-1 select').forEach(function (el) {
+      if (!el.classList.contains('perm-dis')) el.disabled = lock;
+    });
+    $('inCity').style.display = lock ? 'none' : '';
+    $('inState').style.display = lock ? 'none' : '';
+    $('cityLock').style.display = lock ? '' : 'none';
+    $('stateLock').style.display = lock ? '' : 'none';
+    $('addrCheck').style.display = lock ? '' : 'none';
+    $('btnSearchCustomer').style.display = lock ? 'none' : '';
+    $('editCustRow').style.display = lock ? '' : 'none';
+    $('selectAccountBlock').style.display = lock ? '' : 'none';
+    $('bandAddr').textContent = lock ? 'Service Address' : 'Registered Business Address';
+    if (lock) $('searchResults').style.display = 'none';
+  }
+  $('btnSelectCust').addEventListener('click', function () {
+    $('cityLock').textContent = ($('inCity').value.trim() || 'CITY').toUpperCase();
+    $('stateLock').textContent = ($('inState').value.trim() || 'ST').toUpperCase();
+    lockCustomerData(true);
+  });
+  $('btnEditCust').addEventListener('click', function () { lockCustomerData(false); });
+  $('btnBuildOffer').addEventListener('click', function () { goTo(2); });
+  $('typeSMB').addEventListener('click', function () {
+    $('smbSel').style.visibility = 'visible'; $('consSel').style.visibility = 'hidden';
+  });
+  $('typeConsumer').addEventListener('click', function () {
+    $('smbSel').style.visibility = 'hidden'; $('consSel').style.visibility = 'visible';
+  });
+
+  /* Screen 2 */
+  $('btnNewAccount').addEventListener('click', function () {
+    $('newAcctSel').style.visibility = 'visible';
+  });
+
+  /* Screen 3: source links appear once a source is picked */
+  [1, 2].forEach(function (n) {
+    $('src' + n).addEventListener('change', function () {
+      var picked = this.selectedIndex > 0;
+      $('srcLink' + n).style.display = picked ? '' : 'none';
+      if (picked) showCoach('verifySource', $('srcLink' + n));
+    });
+  });
+
+  /* Screen 4 */
+  document.querySelectorAll('input[name="ccok"]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      var yes = $('ccokYes').checked;
+      $('ccExtra').style.display = yes ? '' : 'none';
+      if (yes) showCoach('secure4', $('secureLink4'));
+    });
+  });
+  $('btnValidatePin').addEventListener('click', function () {
+    $('pinOk').style.display = '';
+  });
+  $('secureLink4').addEventListener('click', function () {
+    state.secure4 = true;
+    $('secure4Ok').style.display = '';
+    $('gateHint4').style.display = 'none';
+  });
+
+  /* Screen 5 */
+  $('idaMobChk').addEventListener('change', function () { $('idaMob').disabled = !this.checked; });
+  $('idaEmailChk').addEventListener('change', function () { $('idaEmail').disabled = !this.checked; });
+  $('btnSendIdAuth').addEventListener('click', function () {
+    state.idLinkSent = true;
+    this.textContent = '✓ Link Sent';
+    this.classList.add('selected');
+    $('idaSent').style.display = '';
+    $('gateHint5').style.display = 'none';
+  });
+
+  /* Screen 6 */
+  $('secureLink6').addEventListener('click', function () {
+    state.agreementDone = true;
+    var st = $('agreeStatus');
+    st.textContent = 'Completed';
+    st.style.color = '#222';
+    $('agreeCheck').style.display = '';
+    $('agreeDoneLine').style.display = '';
+    $('gateHint6').style.display = 'none';
+  });
+
+  /* Screen 9 spinner */
+  var spinFrames = ['◐', '◓', '◑', '◒'];
+  var spinIdx = 0;
+  setInterval(function () {
+    var sp = $('paySpin');
+    if (sp) { spinIdx = (spinIdx + 1) % 4; sp.textContent = spinFrames[spinIdx]; }
+  }, 250);
+  $('secureLink9').addEventListener('click', function () {
+    state.secure9 = true;
+    $('payMsg').textContent = 'Customer has completed Secure Data collection.';
+    $('payMsg').className = 'check';
+    $('paySpin').style.display = 'none';
+    $('autopayStatus').textContent = 'Completed';
+    $('autopayStatus').className = 'green';
+    $('gateHint9').style.display = 'none';
+  });
+
+  /* Prev/Next delegation (Next is gated on screens 4 and 6 by their secure-data links) */
+  document.body.addEventListener('click', function (e) {
+    var nx = e.target.closest('[data-next]');
+    if (nx) {
+      if (state.screen === 4 && !state.secure4) { $('gateHint4').style.display = ''; return; }
+      if (state.screen === 5 && !state.idLinkSent) { $('gateHint5').style.display = ''; return; }
+      if (state.screen === 6 && !state.agreementDone) { $('gateHint6').style.display = ''; return; }
+      goTo(parseInt(nx.getAttribute('data-next'), 10));
+      return;
+    }
+    var pv = e.target.closest('[data-prev]');
+    if (pv) { goTo(parseInt(pv.getAttribute('data-prev'), 10)); return; }
+  });
+
+  /* Orders nav = restart */
+  $('navOrders').addEventListener('click', function () {
+    if (state.screen === 1) return;
+    if (confirm('Start a new training order? Current progress will be cleared.')) {
+      state.secureLink1 = false;
+      state.secure4 = false;
+      state.secure9 = false;
+      state.agreementDone = false;
+      state.idLinkSent = false;
+      state.lines = [];
+      state.custName = 'SONNY HOGUE';
+      state.custPhone = '';
+      state.custEmail = '';
+      state.custAddr = '27537 COMMERCE CENTER DR';
+      state.custUnit = '204';
+      state.custCity = 'TEMECULA';
+      state.custState = 'CA';
+      state.custZip = '92590-2532';
+      coachShown = {};
+      hideCoach();
+      var mn = $('mobilityNotice');
+      mn.className = 'notice-yellow';
+      mn.textContent = 'Mobility order is not yet complete. The customer must check their email and read and sign the Terms and Conditions.';
+      /* reset screen-level UI bits */
+      $('secureSent1').style.display = 'none';
+      $('inCampaign').selectedIndex = 0;
+      $('inEin').value = '';
+      $('s1Err').style.display = 'none';
+      lockCustomerData(false);
+      $('searchResults').style.display = 'none';
+      $('svcModal').style.display = 'none';
+      $('secure4Ok').style.display = 'none';
+      $('gateHint4').style.display = 'none';
+      $('gateHint5').style.display = 'none';
+      $('gateHint6').style.display = 'none';
+      $('gateHint9').style.display = 'none';
+      $('newAcctSel').style.visibility = 'hidden';
+      $('ccExtra').style.display = 'none';
+      $('pinOk').style.display = 'none';
+      $('idaSent').style.display = 'none';
+      $('btnSendIdAuth').textContent = 'Send ID Authentication Link';
+      $('btnSendIdAuth').classList.remove('selected');
+      $('agreeStatus').textContent = 'Pending';
+      $('agreeStatus').style.color = '#555';
+      $('agreeCheck').style.display = 'none';
+      $('agreeDoneLine').style.display = 'none';
+      $('payMsg').textContent = 'Customer has started. Page will auto load when customer is finished.';
+      $('payMsg').className = '';
+      $('paySpin').style.display = '';
+      $('autopayStatus').textContent = 'Not started yet';
+      $('autopayStatus').className = 'orange';
+      goTo(1);
+    }
+  });
+
+  /* Page countdown timer: 20:00 per page, resets on every page change */
+  var COUNTDOWN_SECS = 20 * 60;
+  var countdownEnd = Date.now() + COUNTDOWN_SECS * 1000;
+  function resetCountdown() {
+    countdownEnd = Date.now() + COUNTDOWN_SECS * 1000;
+    drawCountdown();
+  }
+  function drawCountdown() {
+    var s = Math.max(0, Math.round((countdownEnd - Date.now()) / 1000));
+    $('timer').textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    $('timer').style.color = s <= 60 ? '#c00' : '';
+  }
+  setInterval(drawCountdown, 1000);
+
+  /* boot */
+  goTo(1);
+})();
+</script>
+</body>
+</html>
