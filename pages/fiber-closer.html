@@ -777,9 +777,9 @@
 
 <script>
 /* =========================================================================
-   CLOSER HUB — content model. Builds ON TOP of the Setter Hub (assumes mastery).
-   Volatile specifics (prices, promos, device models) are NOT baked in — they
-   route to the two sources of truth: MST (live quote) + Knowledge Plus (rules).
+   FIBER CLOSER HUB — content model. Builds ON TOP of the Setter Hub (assumes mastery).
+   Volatile specifics (prices, promotions, eligibility, and carrier-specific workflow)
+   should be verified in the current approved source-of-truth tools before presenting them.
    ========================================================================= */
 
 const HUB = [
@@ -800,9 +800,8 @@ const HUB = [
     <div class="card-grid">
       <button class="nav-card" data-go="sale.mindset"><div class="kicker">The Sale</div><h3>Closer Mindset</h3><p>You gotta want the deal. The mental game that signs customers.</p></button>
       <button class="nav-card" data-go="sale.framework"><div class="kicker">The Sale</div><h3>The Closing Framework</h3><p>Discovery → Solution → Close. The heart of every call.</p></button>
-      <button class="nav-card" data-go="product.devices"><div class="kicker">Product</div><h3>Devices &amp; Porting</h3><p>Locked devices, the trade-in workaround, port protection.</p></button>
-      <button class="nav-card" data-go="product.pricing"><div class="kicker">Product</div><h3>Pricing &amp; Promotions</h3><p>The 3-factor model and the 3 device types.</p></button>
-      <button class="nav-card" data-go="software.stack"><div class="kicker">Software</div><h3>Your Software Stack</h3><p>Knowledge Plus, MST, SARA Plus, GHL — what each does.</p></button>
+      <button class="nav-card" data-go="product.pricing"><div class="kicker">Product</div><h3>Pricing &amp; Promotions</h3><p>The 2-factor model and speed options.</p></button>
+      <button class="nav-card" data-go="software.stack"><div class="kicker">Software</div><h3>Your Software Stack</h3><p class="needs-review">Knowledge Plus, MST, SARA Plus, GHL — what each does.</p></button>
       <button class="nav-card" data-go="compliance.home"><div class="kicker">Compliance</div><h3>Compliance</h3><p>Recorded line, ID auth, the verbatims you can't skip.</p></button>
     </div>
 
@@ -847,14 +846,16 @@ const HUB = [
     <h2>Don't volunteer the friction</h2>
     <p>As you go through the close, you're hunting for the angle that gets the deal done — you are <strong>not</strong> explaining every challenge the customer might bump into unless they bring it up. The detailed conversation happens at the signup page, <em>after</em> they're already happy with the price. By then it's just details and process — not selling.</p>
 
-    <h3>Worked example — the locked-device customer</h3>
-    <p>T-Mobile customer, two iPhones still on payments plus an older one in good shape.</p>
-    <ul>
-      <li><strong>What you think (internal):</strong> "Even swap on the phones. We'll pay off the old devices and move the job forward."</li>
-      <li><strong>What you do NOT do:</strong> pre-explain the T-Mobile installment-lock policy, or open the "well, technically…" monologue.</li>
-      <li><strong>What you DO:</strong> find the angle to upgrade — "Hey, we're going to give you a brand new phone for free and pay off the old one." Reframe the obstacle as an upgrade. Move forward.</li>
-    </ul>
-    <p>What the customer actually needs to hear: <strong>same types of phones, an upgrade, a lower bill.</strong> That's it. The rest is process.</p>
+    <div>
+      <h3>Worked example — the customer who's comfortable with their current internet</h3>
+      <p>Customer has been with the same internet provider for years. The service works, but the bill has gone up and they haven't compared fiber recently.</p>
+      <ul>
+        <li><strong>What you think (internal):</strong> "They don't need to hate their current provider. I just need to show them why comparing the fiber option is worth their time."</li>
+        <li><strong>What you do NOT do:</strong> tell them their current internet is bad, bury them in speed terminology, or start explaining every possible installation or qualification detail before they care about the offer.</li>
+        <li><strong>What you DO:</strong> keep the focus on the outcome — "If we can get you a stronger fiber option at a price that makes sense compared to what you're already paying, it's worth taking a look."</li>
+      </ul>
+      <p>What the customer actually needs to hear: <strong>there may be a better internet option, the numbers are worth comparing, and they can decide once they see the full picture.</strong> That's it. The rest is process.</p>
+    </div>
 
     <div class="qref">
       <div class="ttl">Want-the-deal checklist</div>
@@ -867,29 +868,23 @@ const HUB = [
     </div>
 
     <h2>Call-time playbooks</h2>
-    <details class="playbook"><summary>"Customer can't find their porting PIN"</summary>
-      <p>Don't bail to a callback. The PIN is recoverable live on the call:</p>
-      <ul>
-        <li>It's in their <strong>current carrier's app or website</strong> — walk them there.</li>
-        <li>They can <strong>call into the carrier</strong> to get it — and when you reach the porting page in SARA Plus, it gives you the number to call.</li>
-        <li>Third-party carrier? Call their <strong>general customer service line</strong>.</li>
-        <li>Stuck on the steps? <span class="sot">Knowledge Plus</span> has screenshots for every carrier.</li>
-      </ul>
-      <p>See <strong>Getting the Porting PINs</strong> for the full flow.</p>
-    </details>
-    <details class="playbook"><summary>"Customer is driving / busy / distracted"</summary>
-      <ul>
-        <li>Keep your energy calm and low-pressure — your calm becomes their calm.</li>
-        <li>Anchor on the win: "It's literally just a few quick questions and I'll have your bill dropped — cool if we knock it out right now?"</li>
-        <li>Don't ask permission to stop. Assume forward motion until <em>they</em> stop you.</li>
-      </ul>
-    </details>
+
+    <div>
+      <details class="playbook">
+        <summary>"Customer is driving / busy / distracted"</summary>
+        <ul>
+          <li>Keep your energy calm and low-pressure — your calm becomes their calm.</li>
+          <li>Anchor on the simplicity of the next step: <strong>"No problem — this is pretty straightforward. Let me get the comparison in front of you, and if it makes sense we'll keep moving."</strong></li>
+          <li>Don't invent a reason to turn a live opportunity into a callback. Keep moving naturally until the customer tells you they genuinely need to stop.</li>
+        </ul>
+      </details>
+    </div>
   `},
 
   { id: "framework", label: "The Closing Framework", html: `
     <div class="eyebrow-sm">The Sale · Framework</div>
     <h1 class="page-h1">The Closing Framework</h1>
-    <p class="page-lead">Quick, casual, controlled. The whole call should feel like a conversation with a buddy who knows cell phone plans — not a sales pitch.</p>
+    <p class="page-lead">Quick, casual, controlled. The whole call should feel like a conversation with a buddy who can save you money — not a sales pitch.</p>
 
     <a class="dl-btn" href="../assets/docs/The%20Closing%20Framework.pdf" target="_blank" rel="noopener">⬇ The Closing Framework (PDF)</a>
 
@@ -905,7 +900,7 @@ const HUB = [
     <h3>The Three Moves</h3>
     <ol>
       <li><strong>Get them to question their loyalty.</strong> Why are they with their carrier? Usually it wasn't a choice — it was inertia.</li>
-      <li><strong>Find pain and dig.</strong> Bill too high, dropping calls, old phones. Ask how long. Time amplifies pain.</li>
+      <li><strong>Find pain and dig.</strong> Bill too high, speed too slow, network reliability. Ask how long. Time amplifies pain.</li>
       <li><strong>Let the weight build.</strong> Mirror what they say, then go quiet. They'll fill the silence with the real answer.</li>
     </ol>
     <table>
@@ -913,13 +908,12 @@ const HUB = [
       <tr><td>"How long have you had [carrier]?"</td><td>Opens the door to: "What made you sign up with them?"</td></tr>
       <tr><td>"What made you open to taking a look at this?"</td><td>Mirror their answer back and go quiet. The real pain comes next.</td></tr>
       <tr><td>"How's your current setup working for you?"</td><td>Open-ended. Lets them direct where the pain is.</td></tr>
-      <tr><td>"Is it more the cost, coverage, or the phones?"</td><td>Forces them to prioritize their own pain.</td></tr>
-      <tr><td>"What kind of phones do you have? Still being financed?"</td><td>Situation info + surfaces pain (old/broken phones) <em>and</em> the device-lock picture.</td></tr>
-      <tr><td>"How many lines do you have?"</td><td>Follow with: "And all of those are actually in use?"</td></tr>
-    </table>
+      <tr><td>"Is it more the cost, speed, or reliability?"</td><td>Forces them to prioritize their own pain.</td></tr>
+      <tr><td>"Are you renting your modem and router?"</td><td>Situation info + surfaces pain, extra monthly cost.</td></tr>
+          </table>
     <div class="callout"><div class="ttl">Digging in — the "how long" technique</div>
       <p>When they hand you a pain point, ask how long. That's it.</p>
-      <p>Them: "I've been dropping calls." → You: "How long has that been happening?"<br>
+      <p>Them: "The internet cuts out sometimes." → You: "How long has that been happening?"<br>
       Them: "I feel like I'm paying too much." → You: "How long have you felt that way?"</p>
     </div>
     <p class="pill-note">One thing to confirm early: make sure you're talking to someone who can actually say yes (the decision-maker). Don't run a full close on someone who has to "check with the owner."</p>
@@ -927,9 +921,9 @@ const HUB = [
     <h2>Stage 2 · Solution</h2>
     <p class="lead-in">If discovery was done right, this is quick. Four moves:</p>
     <ol>
-      <li><strong>Recap the order.</strong> "Sounds like you need two new phones and three lines staying the same. That right?"</li>
-      <li><strong>Micro-commitment.</strong> "If we could get you the newest phone at no cost, does that sound like a win?"</li>
-      <li><strong>State the price.</strong> One number. No feature dumps. No breakdowns.</li>
+      <li><strong>Recap the order.</strong> "Sounds like you want faster, more reliable internet and you're open to seeing whether fiber makes more sense than what you have now. That right?"</li>
+      <li><strong>Micro-commitment.</strong> "If we can get you the speed you want at a price that makes sense, does that sound like a win?"</li>
+      <li><strong>State the price.</strong> One number. Keep it simple — you already know the speed they want, no equipment breakdown unless they ask.</li>
       <li><strong>Shut up.</strong> Let them talk first. Answer their clarification simply. Move on.</li>
     </ol>
     <div class="callout rule"><div class="ttl">💡 Pro tip — quote the full price first</div>
@@ -939,15 +933,14 @@ const HUB = [
     <h2>Stage 3 · Close</h2>
     <p class="lead-in">Not a moment. A transition. Sound like you've been here before. Confidence transfers. Hesitation transfers. Pick one.</p>
     <div class="callout warn"><div class="ttl">The Catches Close</div>
-      <p>When they're uneasy, volunteer the catches before they ask: "There are a couple catches: this is a promotional rate, you'll trade in your current phones for the free upgrades, and you keep all your same phone numbers — that's required. Are you good with all of that?"</p>
+      <p>When they're uneasy, volunteer the catches before they ask: "There are a couple catches: this is a promotional rate that will be good for X years, and when that expires we can get you another deal."</p>
     </div>
     <h3>Soft closes — logistics questions that double as commitment tests</h3>
     <table>
       <tr><th>Question</th><th>What It Really Does</th></tr>
-      <tr><td>"Is the business address where you want phones shipped?"</td><td>Assumes they're ordering.</td></tr>
-      <tr><td>"Does she want the orange, silver, or deep blue?"</td><td>Picking colors = decided.</td></tr>
-      <tr><td>"What's a good email for you?"</td><td>Stealth close — you're collecting info now.</td></tr>
-      <tr><td>"Do you have the T-Mobile / Verizon app on your phone?"</td><td>Stealth move into pulling the porting PIN — assumes the deal's done.</td></tr>
+      <tr><td>"Do you want to look at the 1 Gig option first?"</td><td>Assumes they're moving forward and shifts the conversation into choosing the fiber setup.</td></tr>
+      <tr class="needs-review"><td>"Would weekdays or weekends usually be better for the installation?"</td><td>Gets them thinking about installation timing instead of whether they want to move forward.</td></tr>
+            <tr><td>"What's a good email for you?"</td><td>Stealth close — you're collecting info now.</td></tr>
     </table>
 
     <div class="qref">
@@ -956,14 +949,14 @@ const HUB = [
       <ul>
         <li>How long have you had [carrier]? → What made you sign up with them?</li>
         <li>What made you open to taking a look at this? <em>(mirror → silence)</em></li>
-        <li>Is it more the cost, coverage, or the phones?</li>
-        <li>What phones do you have? Still financed? · How many lines — all in use?</li>
+        <li>Is it more the cost, coverage, or the speed?</li>
+        <li>What speed do you have now?</li>
         <li>Any pain point → "How long has that been going on?"</li>
       </ul>
       <h4>Solution</h4>
       <ul><li>Recap → micro-commitment → <strong>one price</strong> (full price first) → shut up.</li></ul>
       <h4>Soft closes</h4>
-      <ul><li>Ship address? · Which color? · Good email? · "Got the carrier app handy?"</li></ul>
+      <ul><li>Good email? · Do you want the one gig? · Installation setup?</li></ul>
     </div>
   `},
 
@@ -1008,11 +1001,11 @@ const HUB = [
   { id: "stack", label: "The Product Stack", html: `
     <div class="eyebrow-sm">Product · Stack</div>
     <h1 class="page-h1">The Product Stack</h1>
-    <p class="page-lead">The five products you'll actually configure — at the depth a closer needs, with the gotchas that trip up orders. <span class="tag volatile">Specs &amp; prices live in Knowledge Plus</span></p>
+    <p class="page-lead">The products you'll actually configure — at the depth a closer needs, with the gotchas that trip up orders. <span class="tag volatile">Specs &amp; prices live in Knowledge Plus</span></p>
     <table>
       <tr><th>Product</th><th>One-liner</th><th>Key gotchas</th></tr>
       <tr><td><strong>Fiber</strong></td><td>Wireline business internet. Can be sold to home-based businesses with an active EIN.</td><td>Business-grade reliability, VIP support, optional static IPs.</td></tr>
-      <tr><td><strong>VoIP</strong></td><td>Phone over fiber. <strong>6 lines per 1 Fiber line.</strong> Phones not included.</td><td>Tied to Fiber, not Air. <strong>Does not work with AIA-B.</strong></td></tr>
+      <tr><td><strong>VoIP</strong></td><td>Phone over fiber. <strong>6 lines per 1 Fiber line.</strong> </td><td>Tied to Fiber, not Air. <strong>Does not work with AIA-B.</strong></td></tr>
       <tr><td><strong>Business Wireless</strong></td><td>Cell lines on a business account. Add-A-Line available.</td><td>Up to 30 lines in SARA Plus; 31+ = MCOE ticket. <strong>Sole Prop without Tax ID can't get this.</strong></td></tr>
       <tr><td><strong>AIA-B</strong> (Internet Air for Business)</td><td>5G/4G LTE wireless internet, sold where Fiber isn't available.</td><td>Employee use only, no cameras, <strong>limit 1 per address</strong>. Lives under the <em>Wireless</em> flow in SARA Plus.</td></tr>
       <tr><td><strong>AWB</strong> (Wireless Broadband)</td><td>Mobile internet hotspot on wireless data.</td><td>Counts toward the 10 CRU device limit.</td></tr>
@@ -1075,8 +1068,8 @@ const HUB = [
 
     <div><h2>Promotions come in two flavors</h2>
     <ul>
-      <li><strong>One-time reward cards</strong> (gift cards) — switcher device-payoff cards, fiber reward cards. Paid out weeks later; <strong>port-in must complete to qualify</strong>, and there's a claim window.</li>
-      <li><strong>Recurring monthly credits</strong> — bundle discounts, AutoPay/Paperless, trade-in line credits. These lower the bill <em>every month</em> — they're what make "your bill goes down" true.</li>
+      <li><strong>One-time reward cards</strong> (gift cards) — <span class="needs-review">switcher device-payoff cards</span>, fiber reward cards. Paid out weeks later; <strong class="needs-review">port-in must complete to qualify</strong>, and there's a claim window.</li>
+      <li><strong>Recurring monthly credits</strong> — bundle discounts, AutoPay/Paperless, <span class="needs-review">trade-in line credits</span>. These lower the bill <em>every month</em> — they're what make "your bill goes down" true.</li>
     </ul></div>
 
     <div class="callout warn needs-review"><div class="ttl">Two things to always set up front</div>
@@ -1171,20 +1164,20 @@ const HUB = [
     <h2>The shape (every order)</h2>
     <ol>
       <li><strong>Set up the customer</strong> — log in, select business account / "SBS Strike," choose <em>Non-Present</em> (phone sale).</li>
-      <li><strong>Customer details</strong> — legal name, email, business name, Tax ID, business type, address. <em>Account # &amp; IMEIs get collected here.</em></li>
+      <li><strong>Customer details</strong> — legal name, email, business name, Tax ID, business type, address. <em class="needs-review">Account # &amp; IMEIs get collected here.</em></li>
       <li><strong>Verify the business</strong> — Google + Secretary of State; confirm it's active and the name matches.</li>
       <li><strong>Credit check</strong> — read the verbatim, get the "yes." (Sole Prop: collect DOB + SSN/ITIN.)</li>
-      <li><strong>ID Authentication</strong> (wireless) — mandatory, no workarounds. See Compliance.</li>
-      <li><strong>Build the offer</strong> — products, plans, devices, port info (number, account #, PIN), promotions.</li>
+      <li><strong>ID Authentication</strong> <span class="needs-review">(wireless)</span> — mandatory, no workarounds. See Compliance.</li>
+      <li><strong>Build the offer</strong> — products, plans, <span class="needs-review">devices, port info (number, account #, PIN)</span>, promotions.</li>
       <li><strong>Finalize</strong> — review for accuracy, set AutoPay, submit, screenshot the confirmation.</li>
     </ol>
 
     <h2>The four flows</h2>
     <table>
       <tr><th>Flow</th><th>Watch for</th></tr>
-      <tr><td><strong>Wireless port-in</strong></td><td>Add port info per line (no dashes in account #), manage Number Lock, add promos.</td></tr>
-      <tr><td><strong>Fiber + VoIP + AWB</strong></td><td>Speed grid → voice packages (max 6 VoIP lines) → AWB device (counts toward 10 CRU).</td></tr>
-      <tr><td><strong>AIA-B</strong></td><td>Ordered under the <em>Wireless</em> flow even though it's internet; can't process if they already have a business wireless account.</td></tr>
+      <tr><td><strong class="needs-review">Wireless port-in</strong></td><td><span class="needs-review">Add port info per line (no dashes in account #), manage Number Lock</span>, add promos.</td></tr>
+      <tr><td><strong>Fiber + VoIP + <span class="needs-review">AWB</span></strong></td><td>Speed grid → voice packages (max 6 VoIP lines) → <span class="needs-review">AWB device (counts toward 10 CRU)</span>.</td></tr>
+      <tr class="needs-review"><td><strong>AIA-B</strong></td><td>Ordered under the <em>Wireless</em> flow even though it's internet; can't process if they already have a business wireless account.</td></tr>
       <tr><td><strong>ID Auth</strong></td><td>Automated (customer scans ID) or Manual (call in). Never use your own number. See Compliance.</td></tr>
     </table>
 
@@ -1202,7 +1195,7 @@ const HUB = [
 
   { id: "simulator", label: "SARA Order Simulator", html: `
     <div class="eyebrow-sm">Software · Practice</div>
-    <h1 class="page-h1">SARA Order Entry Simulator</h1>
+    <h1 class="page-h1">SARA Order Entry Simulator <span class="needs-review">(Wireless Simulator)</span></h1>
     <p class="page-lead">Run full practice orders end to end in a safe training sandbox — nothing is stored or transmitted. Follow the red coach notes at each important step. <button onclick="document.getElementById('simFrame').requestFullscreen()" style="background:#0071e3; color:#fff; border:none; border-radius:980px; padding:8px 18px; font-size:14px; font-weight:500; cursor:pointer; margin-left:6px;">⛶ Open Full Screen</button></p>
     <iframe
         id="simFrame"
