@@ -5582,7 +5582,7 @@
           { type: "tip", html: "<strong>Dialers often leave a gap</strong> between when the customer says \"hello\" and when your mic goes live. Dive straight into the opener the second you're connected — no \"hi, how are you,\" no pleasantries, nothing that tips this as a sales call. Any small talk here and they're already reaching for the hang-up." }
         ],
         scripts: [
-          { s: "OPENER", q: "Hi, this is [name] on a recorded line — I'm working with Verizon, could you help me out for a quick second?", stage: "(wait)" },
+          { s: "OPENER", q: "Hi, this is [name] on a recorded line — I'm working with Brightspeed, could you help me out for a quick second?", stage: "(wait)" },
           { s: "INTENT FRAME", q: "Perfect — The reason for my call is that we've been helping homeowners lower their monthly internet bills.", stage: "(short pause)" },
           { s: "SOFT ASK", q: "If it made sense, would you be opposed to a quick comparison?" }
         ],
@@ -5596,7 +5596,7 @@
           "Burning the opener with \"how are you today?\" — flags a sales call immediately",
           "Leaving dead air after the dialer connects — they'll hang up before you open your mouth",
           "Forgetting the recorded line disclosure — non-negotiable",
-          "Saying \"I'm calling FROM Verizon\" — we're \"working with Verizon,\" different frame"
+          "Saying \"I'm calling FROM Brightspeed\" — we're \"working with Brightspeed,\" different frame"
         ],
         insight: "The opener isn't about getting their attention. It's about not losing it. Sound like a neighbor, not a call center."
       },
@@ -5699,7 +5699,7 @@
     ];
 
     const fullScript = [
-      { h: "Opener", sub: "Your preferred tone. Recorded line disclosure is mandatory.", lines: [{ q: "Hi, this is [name] on a recorded line — I'm working with Verizon, could you help me out for a quick second?", stage: "(wait)" }] },
+      { h: "Opener", sub: "Your preferred tone. Recorded line disclosure is mandatory.", lines: [{ q: "Hi, this is [name] on a recorded line — I'm working with Brightspeed, could you help me out for a quick second?", stage: "(wait)" }] },
       { h: "Clear Intent Frame", sub: "Make the purpose obvious but soft.", lines: [{ q: "Perfect — The reason for my call is that we've been helping homeowners lower their monthly internet bills.", stage: "(short pause)" }, { q: "If it made sense, would you be opposed to a quick comparison?" }] },
       { h: "Optional Combined Opener", sub: "Use when they sound busy or no-nonsense — skip the two-step.", lines: [{ q: "Hi, this is ___ on a recorded line. We've been helping homeowners lower their monthly internet bills — if it made sense, would you be opposed to a quick comparison?" }] },
       { h: "Financial Discovery — Step 1: Line Count", sub: "", lines: [{ q: "Just so we don't waste your time — about how fast is your internet?", stage: "(wait)" }], ifs: [{ label: "If needed", q: "Ballpark is fine." }] },
@@ -5747,10 +5747,10 @@
           {
             q: "You're pitching and the prospect says: \"What company are you with again?\" — mid-pitch, interrupting your discovery. What's the cleanest move?",
             options: [
-              { t: "Launch into a full Verizon credibility pitch with coverage stats and 5G talking points.", c: false, why: "You just handed them the brochure. Setter's job is to set, not close. Give a one-liner and return control." },
-              { t: "\"Good question — we're partnered with Verizon Business. Quick question for you though — how fast is your internet?\"", c: true, why: "Answer briefly (credibility), then redirect with a question. Frame control stays with you. This is what momentum looks like." },
+              { t: "Launch into a full Brightspeed credibility pitch with coverage stats and 5G talking points.", c: false, why: "You just handed them the brochure. Setter's job is to set, not close. Give a one-liner and return control." },
+              { t: "\"Good question — we're partnered with Brightspeed Business. Quick question for you though — how fast is your internet?\"", c: true, why: "Answer briefly (credibility), then redirect with a question. Frame control stays with you. This is what momentum looks like." },
               { t: "\"I'll let the rep you meet with cover that in detail.\"", c: false, why: "Too dismissive. Feels like dodging. One sentence of context costs you nothing and earns credibility." },
-              { t: "\"We're Verizon.\"", c: false, why: "Technically true but we're partnered with Verizon Business — you're not a direct Verizon employee. Misrepresenting risks a compliance problem." }
+              { t: "\"We're Brightspeed.\"", c: false, why: "Technically true but we're partnered with Brightspeed Business — you're not a direct Brightspeed employee. Misrepresenting risks a compliance problem." }
             ]
           },
           {
@@ -5872,7 +5872,7 @@
             q: "A prospect says \"take me off your list.\" Which disposition do you pick?",
             options: [
               { t: "Not Interested", c: false, why: "This is the #1 compliance mistake on the floor. 'Take me off your list' is a DNC request — not a decline. Getting this wrong is how TCPA lawsuits start." },
-              { t: "Not Qualified", c: false, why: "Wrong category entirely. Not Qualified is for structural reasons (already on Verizon, ineligible offer). DNC is a different bucket." },
+              { t: "Not Qualified", c: false, why: "Wrong category entirely. Not Qualified is for structural reasons (already on Brightspeed, ineligible offer). DNC is a different bucket." },
               { t: "Do Not Call (DNC)", c: true, why: "Any phrase resembling 'take me off your list,' 'don't call again,' or 'stop calling' must be dispo'd as DNC. This adds them to our internal DNC list and protects the org." },
               { t: "Voicemail", c: false, why: "Voicemail is for automated greetings, not for live prospects requesting to be removed." }
             ]
@@ -5890,9 +5890,9 @@
             q: "What qualifies a booked appointment as a 'sit' for bonus purposes?",
             options: [
               { t: "Any appointment that shows up on the closer's calendar.", c: false, why: "Not all calendar entries qualify. There are three specific criteria — calendar presence alone isn't one of them." },
-              { t: "The closer's call lasted over 3 minutes, the prospect doesn't already have Verizon, AND they spoke to the actual decision maker.", c: true, why: "All three must be true. Miss any one of them (short call, already on Verizon, or receptionist only) and it's not a qualifying sit." },
+              { t: "The closer's call lasted over 3 minutes, the prospect doesn't already have Brightspeed, AND they spoke to the actual decision maker.", c: true, why: "All three must be true. Miss any one of them (short call, already on Brightspeed, or receptionist only) and it's not a qualifying sit." },
               { t: "The prospect agreed to receive a confirmation text.", c: false, why: "Consent is required to book, but it doesn't determine sit qualification." },
-              { t: "The prospect is on Verizon or T-Mobile.", c: false, why: "The carrier matters only as a gate (not already Verizon) — but carrier alone doesn't qualify a sit." }
+              { t: "The prospect is on Brightspeed or T-Mobile.", c: false, why: "The carrier matters only as a gate (not already Brightspeed) — but carrier alone doesn't qualify a sit." }
             ]
           }
         ]
@@ -6900,7 +6900,7 @@
         <div class="pillar-card">
           <span class="pillar-num">Pillar 01</span>
           <h4>Teach</h4>
-          <p>You're not pitching Verizon. You're surfacing something about their business they haven't thought about — how much their carrier is actually costing them, how bill creep works, what other small businesses have done. Buyers forget features. They remember the rep who made them <em>smarter</em>.</p>
+          <p>You're not pitching Brightspeed. You're surfacing something about their business they haven't thought about — how much their carrier is actually costing them, how bill creep works, what other small businesses have done. Buyers forget features. They remember the rep who made them <em>smarter</em>.</p>
         </div>
         <div class="pillar-card">
           <span class="pillar-num">Pillar 02</span>
@@ -6956,7 +6956,7 @@
           <div class="ch-flow-body">
             <div class="beat-title">The Warmer</div>
             <span class="phase-ref">Phase 1 · Opener + Intent</span>
-            <span class="script">"Hi, this is [name] on a recorded line — working with Verizon. Could you help me out for a quick second?"</span>
+            <span class="script">"Hi, this is [name] on a recorded line — working with Brightspeed. Could you help me out for a quick second?"</span>
             <p class="why">You acknowledge their world before you ask for anything. "Help me out" triggers reciprocity. You earn the next 30 seconds.</p>
           </div>
         </div>
@@ -7333,10 +7333,10 @@
       <h4>The three things your opener must contain</h4>
       <ul>
         <li><strong>1. Your name</strong> — identify yourself as a real person (first name is fine).</li>
-        <li><strong>2. The company you're calling on behalf of</strong> — "I'm working with Verizon" — so the prospect knows who this is.</li>
+        <li><strong>2. The company you're calling on behalf of</strong> — "I'm working with Brightspeed" — so the prospect knows who this is.</li>
         <li><strong>3. The recorded line disclosure</strong> — "on a recorded line" — this is the consent hook.</li>
       </ul>
-      <div class="cmp-quote">"Hi, this is [name] on a recorded line — I'm working with Verizon, could you help me out for a quick second?"</div>
+      <div class="cmp-quote">"Hi, this is [name] on a recorded line — I'm working with Brightspeed, could you help me out for a quick second?"</div>
       <div class="cmp-callout"><strong>Why this exact wording works:</strong> it's short, it's casual, it doesn't sound like a disclaimer being read from a script, and it checks every compliance box in under five seconds.</div>
       <h4>What you cannot do</h4>
       <div class="cmp-do-dont">
@@ -7554,7 +7554,7 @@
           <div class="tier-sub">Direct fiber connections are usually the strongest apples-to-apples competition.</div>
         </div>
         <div class="carrier-grid">
-          ${carrierCard('big3', 'Verizon Fios / Verizon Fiber', 'Primary fiber product for many Strike opportunities')}
+          ${carrierCard('big3', 'Brightspeed Fiber', 'Primary fiber product for many Strike opportunities')}
           ${carrierCard('big3', 'AT&T Fiber', 'Major fiber provider in eligible markets')}
           ${carrierCard('big3', 'Google Fiber', 'Fiber provider in select markets')}
         </div>
@@ -7564,7 +7564,7 @@
             <li>If the customer already has true fiber, do not assume their service is bad. Find out what they pay, what speed tier they have, and whether they have an actual problem worth solving.</li>
             <li>Fiber commonly offers strong upload performance, low latency, and high capacity. The sales conversation may come down to price, current plan, equipment, promotion, or overall value.</li>
             <li>Availability is address-specific. Never assume a provider serves the home just because it serves the neighborhood.</li>
-            <li>Strike will often sell Verizon fiber, but the hub stays provider-flexible because available products can vary by market and campaign.</li>
+            <li>Strike will often sell Brightspeed fiber, but the hub stays provider-flexible because available products can vary by market and campaign.</li>
           </ul>
         </div>
       </div>
@@ -7621,7 +7621,7 @@
         </div>
         <div class="carrier-grid">
           ${carrierCard('voip', 'T-Mobile Home Internet', 'Fixed wireless')}
-          ${carrierCard('voip', 'Verizon 5G Home', 'Fixed wireless where available')}
+          ${carrierCard('voip', 'Brightspeed 5G Home', 'Fixed wireless where available')}
           ${carrierCard('voip', 'Starlink', 'Satellite internet')}
         </div>
         <div class="tier-body">
@@ -7691,7 +7691,7 @@
     </div>
     <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:12px;">Think about that for a second, because you've lived it a thousand times.</p>
     <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:12px;">Every time you walk into a department store and someone asks, "Hey, how can I help you?" — you say no. Then five minutes later you're asking them where to find the pair of shoes you came in for. Every time you're scrolling Amazon and you see a <strong>Sponsored</strong> tag next to an item, you subconsciously skip it — and then after looking around, you scroll right back to that same item.</p>
-    <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:18px;">That's natural sales resistance. It's not rational — it's reflexive. And it's exactly what your customers are doing when they throw out these early responses on the phone. They're not giving you a real position on Verizon or their internet plan. They're putting up a wall because a stranger called them, and the first instinct is to push that stranger away.</p>
+    <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:18px;">That's natural sales resistance. It's not rational — it's reflexive. And it's exactly what your customers are doing when they throw out these early responses on the phone. They're not giving you a real position on Brightspeed or their internet plan. They're putting up a wall because a stranger called them, and the first instinct is to push that stranger away.</p>
 
     <div class="insight-card">
       <div class="insight-label">Mental Model</div>
@@ -7751,7 +7751,7 @@
     <ul style="color:#1d1d1f;font-size:15.5px;line-height:1.8;margin:0 0 16px;padding-left:22px;">
       <li><em>"Hey, do you know how the service is in my area?"</em></li>
       <li><em>"I'm locked in a contract — do you guys pay those off?"</em></li>
-      <li><em>"Do you work for Verizon corporate?"</em></li>
+      <li><em>"Do you work for Brightspeed corporate?"</em></li>
     </ul>
     <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:18px;">If you treat any of these like an actual objection — getting defensive or launching into a long explanation — you'll create resistance that wasn't there. The customer asked a simple question. Keep it simple.</p>
 
@@ -7914,7 +7914,7 @@
     <div class="section-tag" style="color:#ff3b30;background:rgba(255,59,48,0.08);">What to listen for</div>
     <h2 style="font-size:24px;color:#1d1d1f;margin:22px 0 10px;">Common Objections</h2>
     <ul style="color:#1d1d1f;font-size:15.5px;line-height:1.8;margin:0 0 20px;padding-left:22px;">
-      <li><em>"I had Verizon in the past and my coverage was terrible — I was having slowdowns constantly."</em></li>
+      <li><em>"I had Brightspeed in the past and my coverage was terrible — I was having slowdowns constantly."</em></li>
       <li><em>"My spouse handles the account — I can't make that decision on my own."</em></li>
       <li><em>"I'm locked into a contract with my current ISP."</em></li>
       <li><em>"I tried switching once and it was a nightmare — service took weeks to get set up."</em></li>
@@ -7946,16 +7946,16 @@
     </div>
 
     <div class="section-tag" style="color:#ff3b30;background:rgba(255,59,48,0.08);">Walkthrough</div>
-    <h2 style="font-size:22px;color:#1d1d1f;margin:22px 0 14px;">Full Example — "I had Verizon in the past and my coverage was terrible"</h2>
+    <h2 style="font-size:22px;color:#1d1d1f;margin:22px 0 14px;">Full Example — "I had Brightspeed in the past and my coverage was terrible"</h2>
     <div style="background:#f5f5f7;border-radius:14px;padding:24px 28px;margin-bottom:20px;">
       <p style="margin:0 0 8px;"><strong>Step 1 — Question (Discovery):</strong></p>
-      <p style="margin:0 0 6px;">"Oh man, yeah — internet is something that needs to work. How long ago was it that you had Verizon?"</p>
+      <p style="margin:0 0 6px;">"Oh man, yeah — internet is something that needs to work. How long ago was it that you had Brightspeed?"</p>
       <p style="margin:0 0 14px;color:#6e6e73;"><em>(or: "How long have you had X-Finity now?" — both get you the same answer)</em></p>
 
       <p style="margin:0 0 14px;"><strong>Customer:</strong> "About 10 years ago."</p>
 
       <p style="margin:0 0 8px;"><strong>Step 2 — Reason (Short, Logical):</strong></p>
-      <p style="margin:0 0 14px;"><em>(light laugh)</em> "Yeah, I mean that makes sense — 10 years ago I think everybody was kind of struggling with network reliability. I'm sure you've noticed even X-Finity's made major improvements since then. Verizon today is one of the top choice for network reliability."</p>
+      <p style="margin:0 0 14px;"><em>(light laugh)</em> "Yeah, I mean that makes sense — 10 years ago I think everybody was kind of struggling with network reliability. I'm sure you've noticed even X-Finity's made major improvements since then. Brightspeed today is one of the top choices for network reliability."</p>
 
       <p style="margin:0 0 8px;"><strong>Step 3 — Redirect:</strong></p>
       <p style="margin:0 0 12px;">"Setting aside some of the service issues you had in the past — if the deal made sense, would you be opposed to at least considering it?"</p>
@@ -7998,9 +7998,9 @@
     </div>
 
     <div class="insight-card">
-      <div class="insight-label">Verizon-First, Not Verizon-Only</div>
+      <div class="insight-label">Brightspeed-First, Not Brightspeed-Only</div>
       <h4>Keep the Language Flexible</h4>
-      <p>Strike will often be working Verizon fiber opportunities, so setters should become comfortable with Verizon's fiber offering and process. But we may sell other providers too. Keep your language focused on <strong>fiber internet</strong>, <strong>the customer's current provider</strong>, and <strong>the value of hearing the offer</strong> unless the campaign specifically calls for provider-specific wording.</p>
+      <p>Strike will often be working Brightspeed fiber opportunities, so setters should become comfortable with Brightspeed's fiber offering and process. But we may sell other providers too. Keep your language focused on <strong>fiber internet</strong>, <strong>the customer's current provider</strong>, and <strong>the value of hearing the offer</strong> unless the campaign specifically calls for provider-specific wording.</p>
     </div>
 
     <div class="takeaway-box">
@@ -8302,7 +8302,7 @@
       <div style="background:#0071e3;color:#fff;border-radius:18px 18px 4px 18px;padding:14px 18px;margin-bottom:10px;font-size:14px;line-height:1.55;">
         Hi, Michelle here — just confirming Jeffrey will be calling you later today between 7:30 PM and 8:30 PM. He's going to take a look at your current setup and see if there's anything costing you more than it should.<br><br>
         <span style="color:rgba(255,255,255,0.5);">_______________</span><br>
-        <span style="font-size:12px;color:rgba(255,255,255,0.7);">Reply STOP to unsubscribe.<br>Thanks, Onyx Fiber (Authorized Verizon Dealer)</span>
+        <span style="font-size:12px;color:rgba(255,255,255,0.7);">Reply STOP to unsubscribe.<br>Thanks, Onyx Fiber (Authorized Brightspeed Dealer)</span>
       </div>
 
       <div style="background:#0071e3;color:#fff;border-radius:18px 18px 4px 18px;padding:14px 18px;font-size:14px;line-height:1.55;">
