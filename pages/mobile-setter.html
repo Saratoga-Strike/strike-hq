@@ -829,6 +829,49 @@
       color: #c93400;
     }
 
+    .availability-tip {
+      position: relative;
+      background: rgba(175, 82, 222, 0.10);
+      border-left: 3px solid #af52de;
+      border-radius: 0 12px 12px 0;
+      padding: 14px 20px 14px 44px;
+      margin-bottom: 12px;
+      color: #eaf3fb;
+    }
+
+    .availability-tip::before {
+      content: "👥";
+      position: absolute;
+      left: 14px;
+      top: 13px;
+      font-size: 16px;
+    }
+
+    .availability-tip strong { color: #8e44ad; }
+
+    .scout-options {
+      margin: 12px 0 10px;
+      padding: 18px 20px;
+      border: 1px solid #168dff;
+      border-left: 4px solid #168dff;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(22, 141, 255, .16), rgba(7, 92, 174, .10));
+    }
+
+    .scout-options .speaker {
+      display: block;
+      margin-bottom: 6px;
+      color: #eaf3fb;
+      font-size: 11px;
+      font-style: normal;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .scout-options .quote { color: #49adff; font-size: 16px; font-style: italic; }
+    .scout-options .stage-dir { display:block; margin-top:6px; color:#aebdce; font-size:14px; font-style:italic; }
+
     .compliance-note {
       background: rgba(255, 59, 48, 0.05);
       border-left: 3px solid #ff3b30;
@@ -5600,11 +5643,11 @@
         scripts: [
           { s: "OPENER", q: "Hi, this is [name] on a recorded line — I'm working with Verizon, could you help me out for a quick second?", stage: "(wait)" },
           { s: "INTENT FRAME", q: "Perfect — the reason for the call is we've been helping small businesses reduce their cell phone bills.", stage: "(short pause)" },
-          { s: "SOFT ASK", q: "If it made sense, would you be opposed to a quick comparison?" }
+          { s: "SOFT ASK", q: "If we can get you a better price, would you be opposed to a quick comparison?", stage: "(wait for yes)" }
         ],
         optional: {
           title: "Optional Combined Opener",
-          quote: "Hi, this is ___ on a recorded line. We've been helping small businesses reduce their cell phone bills — if it made sense, would you be opposed to a quick comparison?",
+          quote: "Hi, this is ___ on a recorded line. We've been helping small businesses reduce their cell phone bills — if we can get you a better price, would you be opposed to a quick comparison?",
           note: "Use this when they sound busy or no-nonsense. Skip the two-step and combine opener + intent frame into one line. Gets you to the same place faster."
         },
         why: "\"Help me out\" triggers reciprocity — most people say yes before their guard goes up. \"Would you be opposed\" is a negative question: a \"no\" here means \"yes, go ahead.\" It feels lower pressure than asking for a yes, and it's what makes the rest of the call feel like their idea.",
@@ -5679,6 +5722,9 @@
           { s: "CLARIFY YOUR ROLE", q: "My job is just to find people who might be able to save a little bit of money with the service.", stage: "(pause)" },
           { s: "RISK REVERSAL", q: "If it doesn't clearly beat what you have, you'd just stick with what you're doing — fair?", stage: "(wait for yes)" }
         ],
+        scoutOptions: [
+          { title: "CLOSER INTRODUCTION", text: "One of our fiber specialists will walk through the available options with you and work out the exact pricing.", stage: "(continue)" }
+        ],
         why: "You're doing three things at once: (1) lowering your authority so they don't feel pressured, (2) making the conversation feel like THEIR idea to continue, and (3) giving them a guaranteed out. There's no reason to say no. The \"fair?\" is the close on the frame itself — get the verbal yes before you book.",
         weak: [
           "Selling the appointment instead of framing it as a no-risk check",
@@ -5689,17 +5735,19 @@
         insight: "The more you act like you don't care if they take the appointment, the more they want it. Disinterest is the strongest close in the script."
       },
       {
-        num: 6, title: "Book + Anchor", tag: "Phase 6",
-        lead: "Don't just book and hang up. Book a real date and time while you're on the line, confirm out loud, anchor the call frame, and fold the SMS consent into the confirm.",
+        num: 6, title: "Warm Transfer/Book", tag: "Phase 6",
+        lead: "When possible, close the deal on the first call. This greatly increases the likelihood of closing the deal and is more convenient for everyone. When it's not possible, don't just book and hang up. Book a real date and time while you're on the line, confirm out loud, anchor the call frame, and fold the SMS consent into the confirm.",
         proTips: [
+          { type: "availability", html: "<strong>Closer availability.</strong> Before every call, make sure you know which closers are available, and that they are aware you could be sending customers their way." },
           { type: "tip", html: "<strong>Book it live.</strong> Pull up the calendar while you're still on the phone and lock in a specific date and time before you hang up. Vague commitments (\"we'll reach out tomorrow\") are no-shows waiting to happen. A booked appointment with a real slot is what gets confirmed — and what gets closed." },
           { type: "compliance", html: "<strong>No text consent = no appointment.</strong> The confirmation text fires automatically on every booked appointment — there's no override. If they decline the text, <em>you cannot book the appointment.</em> Pivot to a callback instead: \"No worries — why don't I just plan to call you back tomorrow around [time] — does that work?\" Set an apointment in GHL. Callback or nothing." }
         ],
         scripts: [
-          { s: "1 · ASSUMPTIVE BOOK", q: "What's usually easier for you — mornings or afternoons?", stage: "(wait)" },
-          { s: "2 · NARROW DOWN", q: "I've got ___ or ___ available — which works better?" },
-          { s: "3 · CONFIRM + SMS CONSENT", q: "Perfect — I got you down for tomorrow at [time]. Is it okay if I send you a quick confirmation text?", stage: "(pause — wait for yes)" },
-          { s: "4 · ANCHOR THE CALL", q: "The call usually takes about 10 minutes, and [rep name] is going to walk you through everything side-by-side. Sound good?", stage: "(wait for confirmation)" }
+          { s: "1 · WARM TRANSFER CHECK", q: "I have [closer] ready to get you those exact numbers for you, and if you like what you hear, they can get you signed up today.", stage: "(if yes)", followup: "Great, do you mind holding for one second while I get them caught up so you don't need to repeat anything? Then I will bring him in and introduce you.", followupStage: "(wait for yes)" },
+          { s: "2 · ASSUMPTIVE BOOK", q: "No problem, someone can reach out to you when it's more convenient. What's usually easier for you — mornings or afternoons?", stage: "(wait)" },
+          { s: "3 · NARROW DOWN", q: "I've got ___ or ___ available — which works better?", stage: "(wait for response)" },
+          { s: "4 · CONFIRM + SMS CONSENT", q: "Perfect — I got you down for tomorrow at [time]. Is it okay if I send you a quick confirmation text?", stage: "(pause — wait for yes)" },
+          { s: "5 · ANCHOR THE CALL", q: "The call usually takes about 10 minutes, and [rep name] is going to walk you through everything side-by-side. Sound good?", stage: "(wait for confirmation)" }
         ],
         ifBlocks: [{ label: "If they sound unsure", q: "Worst case, you see the numbers and decide it's not for you — at least you'll know for sure either way. Fair enough?", note: "" }],
         why: "Mornings-or-afternoons narrows the decision from open-ended to binary. Folding SMS consent into the confirm step makes it feel like part of the booking, not a separate ask. The 10-minute anchor + \"sound good?\" gives you verbal fingerprints that lock the appointment in their head. The text does two things: recovers forgetful no-shows on strong appointments, and stress-tests weak sets before the closer wastes time.",
@@ -5716,14 +5764,14 @@
 
     const fullScript = [
       { h: "Opener", sub: "Your preferred tone. Recorded line disclosure is mandatory.", lines: [{ q: "Hi, this is [name] on a recorded line — I'm working with Verizon, could you help me out for a quick second?", stage: "(wait)" }] },
-      { h: "Clear Intent Frame", sub: "Make the purpose obvious but soft.", lines: [{ q: "Perfect — the reason for the call is we've been helping small businesses reduce their cell phone bills.", stage: "(short pause)" }, { q: "If it made sense, would you be opposed to a quick comparison?" }] },
-      { h: "Optional Combined Opener", sub: "Use when they sound busy or no-nonsense — skip the two-step.", lines: [{ q: "Hi, this is ___ on a recorded line. We've been helping small businesses reduce their cell phone bills — if it made sense, would you be opposed to a quick comparison?" }] },
+      { h: "Clear Intent Frame", sub: "Make the purpose obvious but soft.", lines: [{ q: "Perfect — the reason for the call is we've been helping small businesses reduce their cell phone bills.", stage: "(short pause)" }, { q: "If we can get you a better price, would you be opposed to a quick comparison?", stage: "(wait for yes)" }] },
+      { h: "Optional Combined Opener", sub: "Use when they sound busy or no-nonsense — skip the two-step.", lines: [{ q: "Hi, this is ___ on a recorded line. We've been helping small businesses reduce their cell phone bills — if we can get you a better price, would you be opposed to a quick comparison?" }] },
       { h: "Financial Discovery — Step 1: Line Count", sub: "", lines: [{ q: "Just so we don't waste your time — about how many phone lines are on the account right now?", stage: "(wait)" }], ifs: [{ label: "If needed", q: "Ballpark is fine." }] },
       { h: "Financial Discovery — Step 2: Monthly Cost", sub: "", lines: [{ q: "And roughly what does the monthly bill usually run?", stage: "(wait)" }], ifs: [{ label: "If they hesitate", q: "No worries — a lot of people don't check it every month. Does somewhere around $___ sound about right?" }] },
       { h: "Financial Discovery — Step 3: Amplify", sub: "Pick 2–3 that feel natural. Start with the primaries; pull from extras when the conversation calls for it.", desc: "Primary amplifiers:", lines: [{ q: "How long have you been paying around that?" }, { q: "Do you have internet bundled in with that, or is that just for the phones?" }], desc2: "Additional amplifiers:", extraLines: [{ q: "Did it start off at that amount, or has it kind of crept up over time?" }, { q: "Are you still paying on any of the phones, or are those all paid off?" }, { q: "Are all of those on a business plan, or are some still on personal lines?" }, { q: "Have you ever called in to try and get them to bring that down at all?" }] },
       { h: "Soft Commitment", sub: "Get a soft verbal yes before moving to the scout frame. Use either approach.", desc: "Option A — Comparison number:", lines: [{ q: "Gotcha. Well just to give you a quick idea — typically [X] phones with us runs less than $[amount] a month.", stage: "(let it land — read their reaction)" }], desc2: "Option B — Direct soft commitment:", extraLines: [{ q: "Gotcha — well, it sounds like you're pretty open to the idea of saving some money. Just to confirm, if we were able to upgrade some devices and drop that bill back down to new customer rates, you're not completely opposed, at all — right?" }] },
-      { h: "Scout Frame + Risk Reversal", sub: "Position yourself as low-stakes. You're the scout, not the closer.", lines: [{ q: "Gotcha. Well listen, I'm really just a scout here. This conversation is meant to be pretty surface level.", stage: "(pause — let that frame set)" }, { q: "My job is just to find people who might be able to save a little bit of money with the service.", stage: "(pause)" }, { q: "If it doesn't clearly beat what you have, you'd just stick with what you're doing — fair?", stage: "(wait for yes)" }] },
-      { h: "Book the Appointment (Assumptive)", sub: "Pull up the calendar and book a real slot live.", lines: [{ q: "What's usually easier for you — mornings or afternoons?", stage: "(wait)" }, { q: "I've got ___ or ___ available — which works better?" }] },
+      { h: "Scout Frame + Risk Reversal", sub: "Position yourself as low-stakes. You're the scout, not the closer.", lines: [{ q: "Gotcha. Well listen, I'm really just a scout here. This conversation is meant to be pretty surface level.", stage: "(pause — let that frame set)" }, { q: "My job is just to find people who might be able to save a little bit of money with the service.", stage: "(pause)" }, { q: "If it doesn't clearly beat what you have, you'd just stick with what you're doing — fair?", stage: "(wait for yes)" }, { q: "One of our fiber specialists will walk through the available options with you and work out the exact pricing.", stage: "(continue)" }] },
+      { h: "Warm Transfer/Book", sub: "Warm transfer whenever a closer is available; otherwise book a real slot live.", lines: [{ q: "I have [closer] ready to get you those exact numbers for you, and if you like what you hear, they can get you signed up today.", stage: "(if yes)" }, { q: "Great, do you mind holding for one second while I get them caught up so you don't need to repeat anything? Then I will bring him in and introduce you.", stage: "(wait for yes)" }, { q: "No problem, someone can reach out to you when it's more convenient. What's usually easier for you — mornings or afternoons?", stage: "(wait)" }, { q: "I've got ___ or ___ available — which works better?", stage: "(wait for response)" }] },
       { h: "Confirm + Anchor", sub: "SMS consent folds into the confirm. Anchor the 10-minute frame before you hang up.", lines: [{ q: "Perfect — I got you down for tomorrow at [time]. Is it okay if I send you a quick confirmation text?", stage: "(pause — wait for yes)" }, { q: "The call usually takes about 10 minutes, and [rep name] is going to walk you through everything side-by-side. Sound good?", stage: "(wait for confirmation)" }], ifs: [{ label: "If they sound unsure", q: "Worst case, you see the numbers and decide it's not for you — at least you'll know for sure either way. Fair enough?" }] }
     ];
 
@@ -6249,6 +6297,10 @@
     </div>
     <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:18px;">Everything else — the pitch, the product, the objection handling, the dialer — we can teach you. Work ethic you have to bring with you.</p>
 
+    <div class="section-tag">CRM Standards</div>
+    <h2 style="font-size:26px;color:#1d1d1f;margin:22px 0 10px;">Notes on Every Call</h2>
+    <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:18px;">Every call must be documented in GoHighLevel. Before moving on to the next lead, confirm that the customer’s profile includes their full name, phone number, and exact service address, including the apartment or unit number when applicable. Your notes must include the call-attempt number, provider pitched, current provider, approximate monthly bill, primary concern, household internet use, appointment details, and the customer’s response. Complete records allow the closer to continue the conversation without making the customer repeat themselves.</p>
+
     <div class="section-tag">Communication</div>
     <h2 style="font-size:26px;color:#1d1d1f;margin:22px 0 10px;">Stay plugged into Slack</h2>
     <p style="color:#424245;font-size:15.5px;line-height:1.65;margin-bottom:12px;"><strong>Slack</strong> is the app we use for everything company-wide: meetings, updates, check-ins, and announcements. Stay logged in and stay engaged.</p>
@@ -6322,13 +6374,14 @@
 
     /* ------- Pitch / Solidifying the Set (full interactive widget) ------- */
     function scriptHtml(sc) {
-      return `<div class="script-block">${sc.s ? `<span class="speaker">${sc.s}</span>` : ''}<span class="quote">"${sc.q}"</span>${sc.stage ? `<span class="stage-dir">${sc.stage}</span>` : ''}</div>`;
+      return `<div class="script-block">${sc.s ? `<span class="speaker">${sc.s}</span>` : ''}<span class="quote">"${sc.q}"</span>${sc.stage ? `<span class="stage-dir">${sc.stage}</span>` : ''}${sc.followup ? `<span class="quote" style="display:block;margin-top:10px;">"${sc.followup}"</span>` : ''}${sc.followupStage ? `<span class="stage-dir">${sc.followupStage}</span>` : ''}</div>`;
     }
     function ifBlockHtml(ib) {
       return `<div class="if-block"><span class="label">${ib.label}</span><span class="quote">"${ib.q}"</span>${ib.note ? `<span class="note">${ib.note}</span>` : ''}</div>`;
     }
     function proTipHtml(pt) {
-      return `<div class="${pt.type === 'compliance' ? 'compliance-note' : 'pro-tip'}">${pt.html}</div>`;
+      const cls = pt.type === 'compliance' ? 'compliance-note' : pt.type === 'availability' ? 'availability-tip' : 'pro-tip';
+      return `<div class="${cls}">${pt.html}</div>`;
     }
     function ampHtml(a) {
       return `<div class="amp-card"><div class="q">➤ "${a.q}"</div><div class="why">${a.w}</div></div>`;
@@ -6363,6 +6416,7 @@
       if (s.ifBlocks) scriptsHtml += s.ifBlocks.map(ifBlockHtml).join('');
       if (s.scriptsB) scriptsHtml += s.scriptsB.map(scriptHtml).join('');
       if (s.ifBlocksB) scriptsHtml += s.ifBlocksB.map(ifBlockHtml).join('');
+      const scoutOptionsHtml = s.scoutOptions ? `<div class="scout-options">${s.scoutOptions.map(option => `<div class="scout-option"><span class="speaker">${option.title}</span><span class="quote">"${option.text}"</span>${option.stage ? `<span class="stage-dir">${option.stage}</span>` : ''}</div>`).join('')}</div>` : '';
 
       let primaryAmpHtml = '';
       let extraAmpHtml = '';
@@ -6396,7 +6450,7 @@
       ${(scriptsHtml || primaryAmpHtml) ? `
         <div class="section-sub">
           <div class="section-label"><span class="dot dot-green"></span>What to Say</div>
-          ${scriptsHtml}${primaryAmpHtml}${extraAmpHtml}${optHtml}
+          ${scriptsHtml}${scoutOptionsHtml}${primaryAmpHtml}${extraAmpHtml}${optHtml}
         </div>` : ''}
       <div class="section-sub">
         <div class="section-label"><span class="dot dot-blue"></span>Why This Works</div>
