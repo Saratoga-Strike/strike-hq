@@ -118,6 +118,11 @@
       drop-shadow(0 0 16px rgba(214,169,40,.10));
   }
 
+  .strike-brand > a {
+    display: flex;
+    align-items: center;
+  }
+
   .strike-brand-copy {
     display: flex;
     flex-direction: column;
@@ -754,12 +759,14 @@
 <body>
   <nav class="topnav">
     <div class="brand strike-brand">
-      <img
-        class="strike-brand-logo"
-        src="../assets/logo/strike-logo-gold.webp"
-        alt="Strike"
-        decoding="async"
-      >
+      <a href="https://strikesales.org/" aria-label="Return to Strike Sales home">
+        <img
+          class="strike-brand-logo"
+          src="../assets/logo/strike-logo-gold.webp"
+          alt="Strike"
+          decoding="async"
+        >
+      </a>
       <div class="strike-brand-copy">
         <span class="strike-brand-kicker">STRIKE SYSTEMS</span>
         <span class="name">Fiber Closer Hub</span>
